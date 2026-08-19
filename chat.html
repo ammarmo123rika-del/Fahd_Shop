@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chat - Fahd Shop</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+    <div class="header-links">
+      <a class="loginLink" href="login.html"><span class="label">Hello, Sign in</span><span class="value">Account</span></a>
+      <a href="cart.html" class="cart-link"><span class="value">🛒</span><span class="cart-count" id="cartCount" style="display:none">0</span></a>
+    </div>
+  </div>
+</div>
+<div class="nav-bar"><div class="nav-bar-inner">
+  <a href="index.html">🏠 Home</a><a href="products.html">🛍️ Products</a><a href="chat.html" class="active">💬 Chat</a><a href="admin.html" class="hostLink">⚙️ Host Panel</a>
+</div></div>
+<section>
+  <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;padding:30px 40px;margin-bottom:24px;color:#fff;box-shadow:0 10px 40px rgba(102,126,234,0.3)">
+    <h1 style="font-size:32px">💬 Chat with Host</h1>
+    <p style="opacity:0.9">Ask questions, request support, or negotiate prices!</p>
+  </div>
+  <div class="chat-container">
+    <div class="chat-sidebar" id="chatUsers"></div>
+    <div class="chat-main">
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-bar">
+        <input type="text" id="chatInput" placeholder="Type your message..." onkeydown="if(event.key==='Enter')sendChatMessage()">
+        <button class="btn" onclick="sendChatMessage()">Send 📨</button>
+      </div>
+    </div>
+  </div>
+</section>
+<footer><p>© 2026 Fahd Shop.</p></footer>
+<script src="app.js"></script>
+<script>renderChat(); setInterval(()=>{const u=getCurrentUser();if(u&&currentChatWith)loadMessages(currentChatWith)},3000)</script>
+</body>
+</html>
