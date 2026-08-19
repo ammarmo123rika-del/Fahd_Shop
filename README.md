@@ -1,4 +1,4 @@
-# 🛒 Fahd Shop - Amazon-Style Online Store
+# 🛒 My Store - Amazon-Style Online Store
 
 A fully functional Amazon-style e-commerce store with real-time chat, host price management, and sales system. Built with Node.js/Express backend and vanilla HTML/CSS/JS frontend.
 

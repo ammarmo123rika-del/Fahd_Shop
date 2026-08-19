@@ -137,7 +137,7 @@ async function renderProductDetail() {
   const id = parseInt(new URLSearchParams(location.search).get('id'));
   const p = await apiGet('/api/products/' + id);
   if (!p || p.error) { c.innerHTML = '<div class="empty"><div class="icon">❓</div><p>Product not found</p></div>'; return; }
-  document.title = p.name + ' - Fahd Shop';
+  document.title = p.name + ' - My Store';
   const savings = p.oldPrice && p.oldPrice > p.price ? p.oldPrice - p.price : 0;
   c.innerHTML = `
     <div style="display:flex;gap:40px;flex-wrap:wrap">
