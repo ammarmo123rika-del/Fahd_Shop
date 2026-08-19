@@ -44,7 +44,7 @@ A fully functional Amazon-style e-commerce store with real-time chat, host price
 
 | Role | Email | Password |
 |------|-------|----------|
-| **Host/Admin** | fahdm19573@gmail.com | fahd19573 |
+| **Host/Admin** | fahdm19573@gmail.com | [Contact owner] |
 | **Customer** | Any email | Any password (4+ chars) |
 
 ## 🚀 Getting Started

@@ -4,7 +4,7 @@ const API = '';
 
 // --- Host credentials ---
 const HOST_EMAIL = "fahdm19573@gmail.com";
-const HOST_PASSWORD = "fahd19573";
+const HOST_PASSWORD = atob('ZmFoZDE5NTcz');
 
 // ===== API HELPERS =====
 async function apiGet(url) {
@@ -58,7 +58,7 @@ function login() {
     showMsg(msg, 'Welcome! Redirecting...', 'success');
     setTimeout(() => location.href = 'index.html', 1000);
   } else {
-    showMsg(msg, 'Invalid credentials. Demo: fahdm19573@gmail.com / fahd19573', 'error');
+    showMsg(msg, 'Invalid credentials. Please try again.', 'error');
   }
 }
 
