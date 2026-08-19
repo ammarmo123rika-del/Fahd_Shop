@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Host Dashboard - Fahd Shop</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+    <div class="header-links">
+      <a class="loginLink" href="login.html">
+        <span class="label">Hello, Fahd</span>
+        <span class="value">Host</span>
+      </a>
+      <a href="cart.html" class="cart-link">
+        <span class="value">🛒</span>
+        <span class="cart-count" id="cartCount" style="display:none">0</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <div class="nav-bar-inner">
+    <a href="admin.html" class="active">📊 Dashboard</a>
+    <a href="add-product.html">➕ Add Product</a>
+    <a href="index.html">🏠 Store Front</a>
+    <a href="orders.html">📦 Orders</a>
+  </div>
+</div>
+
+<section>
+  <h1 style="font-size:28px;margin-bottom:20px">Host Dashboard</h1>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="number" id="statProducts">0</div>
+      <div class="label">Products</div>
+    </div>
+    <div class="stat-card">
+      <div class="number" id="statOrders">0</div>
+      <div class="label">Orders</div>
+    </div>
+    <div class="stat-card">
+      <div class="number" id="statRevenue">$0</div>
+      <div class="label">Revenue</div>
+    </div>
+    <div class="stat-card">
+      <div class="number" id="statCustomers">0</div>
+      <div class="label">Customers</div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap">
+    <a href="add-product.html" class="btn">➕ Add New Product</a>
+    <a href="products.html" class="btn btn-outline">👁 View Store</a>
+    <button class="btn btn-red" onclick="if(confirm('Reset all products to defaults?')){localStorage.removeItem('shop_products');location.reload()}">🔄 Reset Products</button>
+  </div>
+
+  <!-- Products Table -->
+  <div class="card" style="margin-bottom:24px">
+    <h2 style="margin-bottom:12px">📦 All Products</h2>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr><th>Product</th><th>Price</th><th>Stock</th><th>Category</th><th>Action</th></tr>
+        </thead>
+        <tbody id="adminProducts"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="card">
+    <h2 style="margin-bottom:12px">📋 Recent Orders</h2>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th></tr>
+        </thead>
+        <tbody id="adminOrders"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Fahd Shop Host Panel. All rights reserved.</p>
+</footer>
+
+<script src="app.js"></script>
+<script>renderAdmin()</script>
+</body>
+</html>

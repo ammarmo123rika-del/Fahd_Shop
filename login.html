@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign In - Fahd Shop</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-top">
+    <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+  </div>
+</div>
+
+<!-- Sign In Form -->
+<main style="padding:40px 20px">
+  <div class="form-card">
+    <h1>Sign In</h1>
+    <p class="subtitle">Welcome back to Fahd Shop</p>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" placeholder="fahdm19573@gmail.com">
+
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter your password" onkeydown="if(event.key==='Enter')login()">
+
+    <button class="btn-amazon" onclick="login()">Sign In</button>
+
+    <div id="msg"></div>
+
+    <div style="text-align:center;margin-top:20px;font-size:13px;color:#555">
+      <p>Demo Host Account:</p>
+      <p><b>fahdm19573@gmail.com</b> / <b>fahd19573</b></p>
+    </div>
+
+    <hr style="margin:20px 0;border:none;border-top:1px solid #e7e7e7">
+
+    <div style="text-align:center">
+      <p style="font-size:13px;color:#555;margin-bottom:8px">New to Fahd Shop?</p>
+      <a href="signup.html" class="btn-amazon btn-block" style="text-decoration:none;text-align:center;display:block">Create your account</a>
+    </div>
+  </div>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

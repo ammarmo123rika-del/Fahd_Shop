@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Product - Fahd Shop</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+    <div class="search-bar">
+      <select><option>All</option></select>
+      <input type="search" placeholder="Search Fahd Shop...">
+      <button>🔍</button>
+    </div>
+    <div class="header-links">
+      <a class="loginLink" href="login.html">
+        <span class="label">Hello, Sign in</span>
+        <span class="value">Account</span>
+      </a>
+      <a href="cart.html" class="cart-link">
+        <span class="label">Your Cart</span>
+        <span class="value">🛒 Cart</span>
+        <span class="cart-count" id="cartCount" style="display:none">0</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <div class="nav-bar-inner">
+    <a href="index.html">Home</a>
+    <a href="products.html">All Products</a>
+    <a href="wishlist.html">♡ Wishlist</a>
+    <a href="orders.html">My Orders</a>
+    <a href="login.html">Sign In</a>
+  </div>
+</div>
+
+<section>
+  <div id="productDetail"></div>
+</section>
+
+<footer>
+  <p>© 2026 Fahd Shop. All rights reserved.</p>
+</footer>
+
+<script src="app.js"></script>
+<script>renderProductDetail()</script>
+</body>
+</html>

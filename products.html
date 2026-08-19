@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Products - Fahd Shop</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+    <div class="search-bar">
+      <select><option>All</option><option>Electronics</option><option>Fashion</option><option>Home</option><option>Books</option><option>Gaming</option></select>
+      <input type="search" placeholder="Search Fahd Shop...">
+      <button>🔍</button>
+    </div>
+    <div class="header-links">
+      <a class="loginLink" href="login.html">
+        <span class="label">Hello, Sign in</span>
+        <span class="value">Account</span>
+      </a>
+      <a href="cart.html" class="cart-link">
+        <span class="label">Your Cart</span>
+        <span class="value">🛒 Cart</span>
+        <span class="cart-count" id="cartCount" style="display:none">0</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <div class="nav-bar-inner">
+    <a href="index.html">Home</a>
+    <a href="products.html" class="active">All Products</a>
+    <a href="categories.html">Categories</a>
+    <a href="books.html">Books</a>
+    <a href="wishlist.html">♡ Wishlist</a>
+    <a href="orders.html">My Orders</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Sign In</a>
+    <a href="admin.html" class="hostLink">Host Panel</a>
+  </div>
+</div>
+
+<section>
+  <h1 style="font-size:28px;margin-bottom:16px">All Products</h1>
+  <div class="flex-between mb-20" style="flex-wrap:wrap;gap:12px">
+    <input type="search" id="search" class="search" placeholder="🔍 Search products by name or category..." oninput="renderProducts('products')">
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <select id="catFilter" onchange="renderProducts('products')" style="padding:10px;border-radius:8px;border:1px solid #ccc;font-size:14px">
+        <option value="">All Categories</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Fashion">Fashion</option>
+        <option value="Home">Home</option>
+        <option value="Books">Books</option>
+        <option value="Gaming">Gaming</option>
+      </select>
+      <select id="sortFilter" onchange="renderProducts('products')" style="padding:10px;border-radius:8px;border:1px solid #ccc;font-size:14px">
+        <option value="">Sort By</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="rating">Avg. Customer Review</option>
+        <option value="name">Name: A to Z</option>
+      </select>
+    </div>
+  </div>
+  <div id="products" class="grid"></div>
+</section>
+
+<footer>
+  <p>© 2026 Fahd Shop. All rights reserved.</p>
+</footer>
+
+<script src="app.js"></script>
+<script>renderProducts("products")</script>
+</body>
+</html>
