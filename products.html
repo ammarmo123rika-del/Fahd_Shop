@@ -13,7 +13,7 @@
     <a class="logo" href="index.html">Fahd<span>Shop</span></a>
     <div class="search-bar">
       <select><option>All</option><option>Electronics</option><option>Fashion</option><option>Home</option><option>Books</option><option>Gaming</option></select>
-      <input type="search" placeholder="Search Fahd Shop...">
+      <input type="search" placeholder="Search millions of products...">
       <button>🔍</button>
     </div>
     <div class="header-links">
@@ -32,44 +32,51 @@
 
 <div class="nav-bar">
   <div class="nav-bar-inner">
-    <a href="index.html">Home</a>
-    <a href="products.html" class="active">All Products</a>
-    <a href="categories.html">Categories</a>
-    <a href="books.html">Books</a>
+    <a href="index.html">🏠 Home</a>
+    <a href="products.html" class="active">🛍️ All Products</a>
+    <a href="categories.html">📂 Categories</a>
     <a href="wishlist.html">♡ Wishlist</a>
-    <a href="orders.html">My Orders</a>
-    <a href="contact.html">Contact</a>
-    <a href="login.html">Sign In</a>
-    <a href="admin.html" class="hostLink">Host Panel</a>
+    <a href="orders.html">📦 My Orders</a>
+    <a href="login.html">🔑 Sign In</a>
   </div>
 </div>
 
 <section>
-  <h1 style="font-size:28px;margin-bottom:16px">All Products</h1>
-  <div class="flex-between mb-20" style="flex-wrap:wrap;gap:12px">
-    <input type="search" id="search" class="search" placeholder="🔍 Search products by name or category..." oninput="renderProducts('products')">
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <select id="catFilter" onchange="renderProducts('products')" style="padding:10px;border-radius:8px;border:1px solid #ccc;font-size:14px">
-        <option value="">All Categories</option>
-        <option value="Electronics">Electronics</option>
-        <option value="Fashion">Fashion</option>
-        <option value="Home">Home</option>
-        <option value="Books">Books</option>
-        <option value="Gaming">Gaming</option>
-      </select>
-      <select id="sortFilter" onchange="renderProducts('products')" style="padding:10px;border-radius:8px;border:1px solid #ccc;font-size:14px">
-        <option value="">Sort By</option>
-        <option value="price-low">Price: Low to High</option>
-        <option value="price-high">Price: High to Low</option>
-        <option value="rating">Avg. Customer Review</option>
-        <option value="name">Name: A to Z</option>
-      </select>
+  <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;padding:30px 40px;margin-bottom:24px;color:#fff;box-shadow:0 10px 40px rgba(102,126,234,0.3)">
+    <h1 style="font-size:32px;margin-bottom:8px">🛍️ All Products</h1>
+    <p style="opacity:0.9">Browse our entire catalog with search, filters, and sort options.</p>
+  </div>
+
+  <div style="background:rgba(255,255,255,0.9);backdrop-filter:blur(20px);border-radius:16px;padding:20px;margin-bottom:24px;box-shadow:0 8px 30px rgba(0,0,0,0.06);border:1px solid rgba(255,255,255,0.2)">
+    <div class="flex-between" style="flex-wrap:wrap;gap:12px">
+      <input type="search" id="search" class="search" placeholder="🔍 Search by name or category..." oninput="renderProducts('products')" style="max-width:100%">
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <select id="catFilter" onchange="renderProducts('products')" style="padding:12px 16px;border-radius:12px;border:2px solid #e8e8e8;font-size:14px;background:#fff;cursor:pointer;transition:all 0.3s;font-family:inherit">
+          <option value="">📂 All Categories</option>
+          <option value="Electronics">📱 Electronics</option>
+          <option value="Fashion">👟 Fashion</option>
+          <option value="Home">🧹 Home</option>
+          <option value="Books">📚 Books</option>
+          <option value="Gaming">🎮 Gaming</option>
+        </select>
+        <select id="sortFilter" onchange="renderProducts('products')" style="padding:12px 16px;border-radius:12px;border:2px solid #e8e8e8;font-size:14px;background:#fff;cursor:pointer;transition:all 0.3s;font-family:inherit">
+          <option value="">🔄 Sort By</option>
+          <option value="price-low">💰 Price: Low → High</option>
+          <option value="price-high">💎 Price: High → Low</option>
+          <option value="rating">⭐ Top Rated</option>
+          <option value="name">🔤 Name: A → Z</option>
+        </select>
+      </div>
     </div>
   </div>
+
   <div id="products" class="grid"></div>
 </section>
 
 <footer>
+  <div class="footer-links">
+    <a href="index.html">Home</a><a href="products.html">Products</a><a href="contact.html">Contact</a>
+  </div>
   <p>© 2026 Fahd Shop. All rights reserved.</p>
 </footer>
 

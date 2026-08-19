@@ -14,7 +14,7 @@
     <div class="header-links">
       <a class="loginLink" href="login.html">
         <span class="label">Hello, Fahd</span>
-        <span class="value">Host</span>
+        <span class="value">⚙️ Host</span>
       </a>
       <a href="cart.html" class="cart-link">
         <span class="value">🛒</span>
@@ -34,38 +34,43 @@
 </div>
 
 <section>
-  <h1 style="font-size:28px;margin-bottom:20px">Host Dashboard</h1>
+  <div style="background:linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);border-radius:20px;padding:40px;margin-bottom:28px;color:#fff;box-shadow:0 20px 60px rgba(15,12,41,0.4)">
+    <h1 style="font-size:32px;margin-bottom:8px">📊 Host Dashboard</h1>
+    <p style="opacity:0.8">Manage your products, orders, and store from here.</p>
+  </div>
 
   <!-- Stats -->
   <div class="stats">
     <div class="stat-card">
       <div class="number" id="statProducts">0</div>
-      <div class="label">Products</div>
+      <div class="label">📦 Products</div>
     </div>
     <div class="stat-card">
       <div class="number" id="statOrders">0</div>
-      <div class="label">Orders</div>
+      <div class="label">📋 Orders</div>
     </div>
     <div class="stat-card">
       <div class="number" id="statRevenue">$0</div>
-      <div class="label">Revenue</div>
+      <div class="label">💰 Revenue</div>
     </div>
     <div class="stat-card">
       <div class="number" id="statCustomers">0</div>
-      <div class="label">Customers</div>
+      <div class="label">👥 Customers</div>
     </div>
   </div>
 
   <!-- Quick Actions -->
-  <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap">
+  <div style="display:flex;gap:14px;margin-bottom:28px;flex-wrap:wrap">
     <a href="add-product.html" class="btn">➕ Add New Product</a>
     <a href="products.html" class="btn btn-outline">👁 View Store</a>
     <button class="btn btn-red" onclick="if(confirm('Reset all products to defaults?')){localStorage.removeItem('shop_products');location.reload()}">🔄 Reset Products</button>
   </div>
 
   <!-- Products Table -->
-  <div class="card" style="margin-bottom:24px">
-    <h2 style="margin-bottom:12px">📦 All Products</h2>
+  <div class="card" style="margin-bottom:28px;padding:0;overflow:hidden">
+    <div style="padding:20px 24px;border-bottom:1px solid #f0f0f0">
+      <h2>📦 All Products</h2>
+    </div>
     <div style="overflow-x:auto">
       <table>
         <thead>
@@ -77,8 +82,10 @@
   </div>
 
   <!-- Orders Table -->
-  <div class="card">
-    <h2 style="margin-bottom:12px">📋 Recent Orders</h2>
+  <div class="card" style="padding:0;overflow:hidden">
+    <div style="padding:20px 24px;border-bottom:1px solid #f0f0f0">
+      <h2>📋 Recent Orders</h2>
+    </div>
     <div style="overflow-x:auto">
       <table>
         <thead>
@@ -91,7 +98,8 @@
 </section>
 
 <footer>
-  <p>© 2026 Fahd Shop Host Panel. All rights reserved.</p>
+  <div class="footer-links"><a href="index.html">Home</a><a href="admin.html">Dashboard</a></div>
+  <p>© 2026 Fahd Shop Host Panel.</p>
 </footer>
 
 <script src="app.js"></script>

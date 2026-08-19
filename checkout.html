@@ -17,14 +17,17 @@
   </div>
 </div>
 <div class="nav-bar"><div class="nav-bar-inner">
-  <a href="index.html">Home</a><a href="products.html">All Products</a>
+  <a href="index.html">🏠 Home</a><a href="products.html">🛍️ All Products</a>
 </div></div>
 <section>
-  <h1 style="font-size:28px;margin-bottom:16px">💳 Checkout</h1>
-  <div class="card" style="max-width:600px;padding:30px">
-    <p>Review your order and click Place Order to complete your purchase.</p>
+  <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;padding:30px 40px;margin-bottom:24px;color:#fff;box-shadow:0 10px 40px rgba(102,126,234,0.3)">
+    <h1 style="font-size:32px">💳 Checkout</h1>
+  </div>
+  <div class="card" style="max-width:600px;padding:32px">
+    <h2 style="margin-bottom:16px">Order Summary</h2>
+    <p style="color:#666;margin-bottom:20px">Review your order and click Place Order to complete your purchase.</p>
     <div id="cartSummary"></div>
-    <button class="btn-amazon btn-block" onclick="checkout()" style="margin-top:16px">Place Order</button>
+    <button class="btn-amazon btn-block" onclick="checkout()" style="margin-top:20px;font-size:16px;padding:16px">💳 Place Order</button>
   </div>
 </section>
 <footer><p>© 2026 Fahd Shop.</p></footer>
@@ -34,14 +37,14 @@
   const cart=getCart();
   const products=getProducts();
   const el=document.getElementById('cartSummary');
-  if(!cart.length){el.innerHTML='<p style="margin:16px 0">Your cart is empty. <a href="products.html">Go shopping</a></p>';return}
+  if(!cart.length){el.innerHTML='<div class="empty" style="padding:30px"><p>Your cart is empty. <a href="products.html">Go shopping</a></p></div>';return}
   let total=0;
   el.innerHTML=cart.map(ci=>{
     const p=products.find(x=>x.id===ci.id);
     if(!p)return'';
     total+=p.price*ci.qty;
-    return`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee"><span>${p.image} ${p.name} × ${ci.qty}</span><b>$${(p.price*ci.qty).toLocaleString()}</b></div>`;
-  }).join('')+'<div style="text-align:right;padding:16px 0;font-size:20px"><b>Total: $'+total.toLocaleString()+'</b></div>';
+    return`<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #f0f0f0"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:28px">${p.image}</span><div><b style="font-size:14px">${p.name}</b><p style="color:#888;font-size:12px">Qty: ${ci.qty}</p></div></div><b style="color:#f5576c">$${(p.price*ci.qty).toLocaleString()}</b></div>`;
+  }).join('')+'<div style="text-align:right;padding:20px 0;font-size:22px"><b>Total: <span style="background:linear-gradient(135deg,#f5576c,#ff6b6b);-webkit-background-clip:text;-webkit-text-fill-color:transparent">$'+total.toLocaleString()+'</span></b></div>';
 })();
 </script>
 </body>
