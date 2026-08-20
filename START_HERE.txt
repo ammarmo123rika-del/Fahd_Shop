@@ -1,0 +1,19 @@
+FAHD SHOP COMPLETE
+
+HOW TO OPEN:
+1. Download this ZIP.
+2. Right-click it -> Extract All.
+3. Open the extracted folder.
+4. Double-click INDEX.HTML.
+5. The website opens in your browser.
+
+IMPORTANT:
+Do NOT open the ZIP and try to run random files from inside it.
+Start with index.html.
+
+HOST:
+Open login.html.
+Email: fahdm19573@gmil.com
+Password: 19573
+
+This is a local front-end demo. It does not provide a real public server, real payment processing, or secure authentication.

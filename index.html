@@ -1,106 +1,13 @@
 <!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Store - Everything You Need</title>
-<link rel="stylesheet" href="style.css">
-</head>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fahd Shop</title><link rel="stylesheet" href="style.css"></head>
 <body>
-
-<!-- Header -->
-<div class="header">
-  <div class="header-top">
-    <a class="logo" href="index.html">My<span>Store</span></a>
-    <div class="search-bar">
-      <select><option>All</option><option>Electronics</option><option>Fashion</option><option>Home</option><option>Books</option><option>Gaming</option></select>
-      <input type="search" placeholder="Search millions of products...">
-      <button>🔍</button>
-    </div>
-    <div class="header-links">
-      <a class="loginLink" href="login.html">
-        <span class="label">Hello, Sign in</span>
-        <span class="value">Account</span>
-      </a>
-      <a href="orders.html">
-        <span class="label">Returns</span>
-        <span class="value">& Orders</span>
-      </a>
-      <a href="cart.html" class="cart-link">
-        <span class="label">Your Cart</span>
-        <span class="value">🛒 Cart</span>
-        <span class="cart-count" id="cartCount" style="display:none">0</span>
-      </a>
-    </div>
-  </div>
-</div>
-
-<!-- Nav Bar -->
-<div class="nav-bar">
-  <div class="nav-bar-inner">
-    <a href="index.html" class="active">🏠 Home</a>
-    <a href="products.html">🛍️ All Products</a>
-    <a href="categories.html">📂 Categories</a>
-    <a href="books.html">📚 Books</a>
-    <a href="wishlist.html">♡ Wishlist</a>
-    <a href="orders.html">📦 My Orders</a>
-    <a href="contact.html">📬 Contact</a>
-    <a href="chat.html">💬 Chat</a>
-    <a href="login.html">🔑 Sign In</a>
-    <a href="admin.html" class="hostLink">⚙️ Host Panel</a>
-  </div>
-</div>
-
-<!-- Hero Banner -->
-<section>
-  <div class="hero">
-    <h1>✨ Welcome to My Store ✨</h1>
-    <p>Discover millions of products with fast delivery, unbeatable prices, and effortless returns.</p>
-    <a href="products.html" class="btn">Shop Now →</a>
-  </div>
-</section>
-
-<!-- Category Strip -->
-<div class="cat-strip" id="categories"></div>
-
-<!-- Featured Products -->
-<section>
-  <h2>🔥 Today's Best Deals</h2>
-  <div id="featured" class="grid"></div>
-  <div class="text-center mt-20">
-    <a href="products.html" class="btn btn-outline">See All Products →</a>
-  </div>
-</section>
-
-<!-- Newsletter Section -->
-<section>
-  <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;padding:50px 40px;text-align:center;color:#fff;box-shadow:0 20px 60px rgba(102,126,234,0.3)">
-    <h2 style="color:#fff;border:none;margin-bottom:12px;font-size:28px">📬 Stay Updated</h2>
-    <p style="margin-bottom:20px;opacity:0.9">Get the latest deals and new arrivals delivered to your inbox.</p>
-    <div style="display:flex;max-width:400px;margin:auto;gap:8px">
-      <input type="email" placeholder="Enter your email" style="flex:1;border:none;border-radius:10px;padding:14px 16px;font-size:14px">
-      <button class="btn" style="white-space:nowrap">Subscribe</button>
-    </div>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer>
-  <div class="footer-links">
-    <a href="index.html">Home</a>
-    <a href="products.html">Products</a>
-    <a href="categories.html">Categories</a>
-    <a href="contact.html">Contact</a>
-    <a href="login.html">Sign In</a>
-    <a href="admin.html">Host Panel</a>
-  </div>
-  <p>© 2026 My Store. All rights reserved. Built with ❤️</p>
-</footer>
-
-<script src="app.js"></script>
-<script>
-  renderCategories();
-  renderProducts("featured", 8);
-</script>
-</body>
-</html>
+<header><a class="logo" href="index.html">Fahd Shop</a><nav>
+<a href="index.html">Home</a><a href="products.html">Products</a><a href="categories.html">Categories</a>
+<a href="books.html">Books</a><a href="cart.html">Cart</a><a href="account.html">Account</a>
+<a href="orders.html">Orders</a><a href="contact.html">Contact</a><a href="login.html">Login</a><a href="admin.html">Host</a> <a href="ai.html" style="color:#7c3aed;font-weight:bold">🤖 AI</a>
+</nav></header>
+<main><section class="hero"><h1>Everything you need, in one place.</h1><p>Amazon-style demo store with customer shopping and host/admin controls.</p><a class="btn" href="products.html">Shop now</a></section>
+<section><h2>Featured products</h2><div id="featured" class="grid"></div></section></main>
+<script src="app.js"></script><script>renderProducts("featured",3)</script>
+</body></html>

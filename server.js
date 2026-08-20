@@ -1,8 +1,58 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
 const app = express();
 var PORT = 5000;
+// ===== AI CONFIG =====
+var OLLAMA = 'http://127.0.0.1:11434';
+var DEFAULT_MODEL = process.env.FAHD_MODEL || 'llama3.2';
+var SYSTEM_PROMPT = 'You are Fahd AI, a capable friendly AI assistant. Be accurate honest and helpful. Think step by step. Use Markdown. Answer in the same language the user writes in.';
+
+function buildMessages(history, attachments, model) {
+  var msgs = [{ role: "system", content: SYSTEM_PROMPT }];
+  if (!history || !history.length) return msgs;
+  for (var i = 0; i < history.slice(-20).length; i++) {
+    var m = history.slice(-20)[i];
+    if (m.role === "assistant" && !m.content) continue;
+    msgs.push({ role: m.role, content: m.content || "" });
+  }
+  if (attachments && attachments.length) {
+    var last = msgs[msgs.length - 1];
+    if (last && last.role === "user") {
+      var parts = [];
+      for (var j = 0; j < attachments.length; j++) {
+        var a = attachments[j];
+        if (a.type === "text") parts.push("[File: " + a.name + "]\n" + Buffer.from(a.data || "", "base64").toString("utf8"));
+        else parts.push("[Image: " + a.name + "]");
+      }
+      last.content = (last.content || "") + "\n\n--- Attachments ---\n" + parts.join("\n\n");
+    }
+  }
+  return msgs;
+}
+
+function ollamaStream(res, model, messages) {
+  return new Promise(function(resolve, reject) {
+    var postData = JSON.stringify({ model: model || DEFAULT_MODEL, messages: messages, stream: true });
+    var r = http.request(OLLAMA + "/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(postData) }
+    }, function(ollRes) {
+      var out = "";
+      ollRes.on("data", function(chunk) {
+        var str = chunk.toString();
+        res.write(JSON.stringify({ d: str.replace(/\n/g, "") }) + "\n");
+        out += str;
+      });
+      ollRes.on("end", function() { resolve(out); });
+      ollRes.on("error", reject);
+    });
+    r.on("error", function(e) { res.write(JSON.stringify({ error: e.message }) + "\n"); res.end(); reject(e); });
+    r.write(postData); r.end();
+  });
+}
+
 
 app.use(express.json());
 
@@ -21,8 +71,7 @@ const DEFAULT_PRODUCTS = [
   {id:9,name:"Nintendo Switch OLED",price:349,oldPrice:370,image:"🎮",category:"Gaming",rating:4.8,reviews:7800,prime:true,stock:25,desc:"7-inch OLED screen, wide adjustable stand, enhanced audio.",onSale:false,salePercent:0},
   {id:10,name:"Instant Pot Duo 7-in-1 6Qt",price:79,oldPrice:99,image:"🍲",category:"Home",rating:4.7,reviews:15000,prime:true,stock:60,desc:"Pressure cooker, slow cooker, rice cooker, steamer, sauté, yogurt maker, and warmer.",onSale:false,salePercent:0},
   {id:11,name:"Bose QuietComfort Ultra Earbuds",price:249,oldPrice:299,image:"🎧",category:"Electronics",rating:4.6,reviews:3200,prime:true,stock:35,desc:"World-class noise cancellation with Immersive Audio.",onSale:false,salePercent:0},
-  {id:12,name:"Levi's 501 Original Fit Jeans",price:59,oldPrice:79,image:"👖",category:"Fashion",rating:4.4,reviews:6700,prime:true,stock:80,desc:"The original button fly jean since 1873. Iconic straight leg.",onSale:false,salePercent:0},
-  {id:13,name:"Fahd AI - Next Generation AI Assistant",price:49.99,oldPrice:79.99,image:"🤖",category:"Electronics",rating:5.0,reviews:1,prime:true,stock:100,desc:"Fahd AI is a powerful next-generation AI assistant built by Fahd. Features advanced natural language processing, code generation, and intelligent automation.",onSale:true,salePercent:37}
+  {id:12,name:"Levi's 501 Original Fit Jeans",price:59,oldPrice:79,image:"👖",category:"Fashion",rating:4.4,reviews:6700,prime:true,stock:80,desc:"The original button fly jean since 1873. Iconic straight leg.",onSale:false,salePercent:0}
 ];
 
 function loadData() {
@@ -230,6 +279,64 @@ app.get('/api/sales', function(req, res) {
   res.json(data.sales);
 });
 
+
+// ===== AI ROUTES =====
+app.get('/api/health', async function(req, res) {
+  try {
+    var r = await fetch(OLLAMA + '/api/tags');
+    if (!r.ok) throw 0;
+    res.json({ status: 'OK', ollama: true });
+  } catch(e) {
+    res.status(503).json({ status: 'Ollama not reachable', ollama: false });
+  }
+});
+
+app.get('/api/models', async function(req, res) {
+  try {
+    var r = await fetch(OLLAMA + '/api/tags');
+    var d = await r.json();
+    var models = (d.models || []).map(function(m) {
+      return { name: m.name, size: m.size, vision: /llava|vision|bakllava/i.test(m.name), tools: /qwen|llama3/i.test(m.name) };
+    });
+    res.json({ models: models });
+  } catch(e) {
+    res.json({ models: [] });
+  }
+});
+
+app.post('/api/pull', async function(req, res) {
+  try {
+    var r = await fetch(OLLAMA + '/api/pull', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: req.body.model })
+    });
+    res.writeHead(200, { 'Content-Type': 'text/plain', 'Transfer-Encoding': 'chunked' });
+    var reader = r.body.getReader();
+    var dec = new TextDecoder();
+    while (true) {
+      var result = await reader.read();
+      if (result.done) break;
+      res.write(dec.decode(result.value, { stream: true }));
+    }
+    res.end();
+  } catch(e) {
+    res.status(500).end('Error: ' + e.message);
+  }
+});
+
+app.post('/api/chat', async function(req, res) {
+  try {
+    var history = req.body.messages || req.body.history || [];
+    var atts = req.body.attachments || [];
+    var model = req.body.model || DEFAULT_MODEL;
+    res.writeHead(200, { 'Content-Type': 'application/x-ndjson', 'Transfer-Encoding': 'chunked', 'Cache-Control': 'no-cache' });
+    await ollamaStream(res, model, buildMessages(history, atts, model));
+    res.end();
+  } catch(e) {
+    if (!res.headersSent) res.status(500).json({ error: e.message });
+    else res.end();
+  }
+});
 // ===== STATIC FILES (after all API routes) =====
 app.use(express.static(__dirname, { fallthrough: true }));
 
@@ -240,5 +347,5 @@ app.use(function(req, res) {
 
 // ===== START SERVER =====
 app.listen(PORT, function() {
-  console.log('FAHD SHOP SERVER running on http://localhost:' + PORT);
+  console.log('Fahd Shop + AI running on http://localhost:' + PORT);
 });

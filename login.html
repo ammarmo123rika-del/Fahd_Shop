@@ -1,48 +1,9 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sign In - My Store</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<div class="header">
-  <div class="header-top">
-    <a class="logo" href="index.html">My<span>Store</span></a>
-  </div>
-</div>
-
-<main style="padding:50px 20px;min-height:70vh;display:flex;align-items:center;justify-content:center">
-  <div class="form-card">
-    <h1>👋 Welcome Back</h1>
-    <p class="subtitle">Sign in to your My Store account</p>
-
-    <label for="email">Email Address</label>
-    <input type="email" id="email" placeholder="fahdm19573@gmail.com">
-
-    <label for="password">Password</label>
-    <input type="password" id="password" placeholder="Enter your password" onkeydown="if(event.key==='Enter')login()">
-
-    <button class="btn-amazon" onclick="login()">Sign In</button>
-
-    <div id="msg"></div>
-
-    <div style="text-align:center;margin-top:24px;padding:16px;background:linear-gradient(135deg,#f8f9ff,#f0f2ff);border-radius:12px">
-      <p style="font-size:12px;color:#888;margin-bottom:6px">🔐 Host Account</p>
-      <p style="font-size:13px"><b>fahdm19573@gmail.com</b></p>
-    </div>
-
-    <hr style="margin:24px 0;border:none;border-top:1px solid #e8e8e8">
-
-    <div style="text-align:center">
-      <p style="font-size:14px;color:#666;margin-bottom:12px">New to My Store?</p>
-      <a href="signup.html" class="btn-amazon btn-block" style="text-decoration:none;text-align:center;display:block;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:0 8px 30px rgba(102,126,234,0.3)">Create your account</a>
-    </div>
-  </div>
-</main>
-
-<script src="app.js"></script>
-</body>
-</html>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login - Fahd Shop</title><link rel="stylesheet" href="style.css"></head>
+<body><header><a class="logo" href="index.html">Fahd Shop</a><nav>
+<a href="index.html">Home</a><a href="products.html">Products</a><a href="categories.html">Categories</a>
+<a href="books.html">Books</a><a href="cart.html">Cart</a><a href="account.html">Account</a>
+<a href="orders.html">Orders</a><a href="contact.html">Contact</a><a href="login.html">Login</a><a href="admin.html">Host</a>
+</nav></header>
+<main><div class="card form"><h1>Login</h1><input id="email" type="email" placeholder="Email"><input id="password" type="password" placeholder="Password"><button class="btn" onclick="login()">Login</button><p id="msg"></p><small>Demo host/admin account is configured locally in app.js.</small></div></main>
+<script src="app.js"></script></body></html>
