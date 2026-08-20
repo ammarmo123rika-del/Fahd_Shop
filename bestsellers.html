@@ -3,9 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Account - Fahd Shop</title>
+<title>Best Sellers - Fahd Shop</title>
 <link rel="stylesheet" href="style.css">
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  fetch('/api/products').then(r=>r.json()).then(products => {
+    var sorted = products.sort((a,b) => (b.reviews||0)-(a.reviews||0));
+    var el = document.getElementById('bestgrid');
+    el.innerHTML = sorted.map((p,i) => {
+      var stars='';var r=Math.round(p.rating||0);for(var j=0;j<r;j++)stars+='\u2605';for(var k=r;k<5;k++)stars+='\u2606';
+      return '<div class="product-card" onclick="location.href=\'product.html?id='+p.id+'\'"><div class="img-wrap" style="position:relative"><div style="position:absolute;top:10px;left:10px;background:#ff9900;color:#000;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px">#'+(i+1)+'</div>'+(p.image||'\uD83D\uDCE6')+'</div><div class="info"><div class="title">'+p.name+'</div><div class="stars"><span class="star-color">'+stars+'</span><span class="count">('+p.reviews+')</span></div><div class="price"><span class="current">$'+p.price+'</span>'+(p.oldPrice?'<span class="old">$'+p.oldPrice+'</span>':'')+(p.onSale?'<span class="badge">-'+p.salePercent+'%</span>':'')+'</div>'+(p.prime?'<div class="prime">✓ Prime</div>':'')+'<button class="btn-cart" onclick="event.stopPropagation();addToCart('+p.id+')">Add to Cart</button></div></div>';
+    }).join('');
+  });
+});
+</script>
 </head>
 <body>
 <div class="top-bar">
@@ -33,23 +44,10 @@
 </div>
 <div class="container">
 
-<div class="breadcrumb"><a href="index.html">Home</a> / My Account</div>
-<h1 style="margin:20px 0 10px;font-size:28px">👤 My Account</h1>
-<div class="feature-grid">
-  <div class="feature-box" onclick="location.href='orders.html'" style="cursor:pointer"><div class="icon">📦</div><h3>My Orders</h3><p>Track and manage your orders</p></div>
-  <div class="feature-box" onclick="location.href='wishlist.html'" style="cursor:pointer"><div class="icon">♡</div><h3>Wishlist</h3><p>Items you saved for later</p></div>
-  <div class="feature-box" onclick="location.href='cart.html'" style="cursor:pointer"><div class="icon">🛒</div><h3>Cart</h3><p>Review your shopping cart</p></div>
-  <div class="feature-box" onclick="location.href='login.html'" style="cursor:pointer"><div class="icon">🔑</div><h3>Login / Signup</h3><p>Manage your credentials</p></div>
-</div>
-<div class="card" id="userInfo"></div>
-<script>
-document.addEventListener('DOMContentLoaded',function(){
-  var u=JSON.parse(localStorage.getItem('fahd_user')||'null');
-  var el=document.getElementById('userInfo');
-  if(u){el.innerHTML='<h2>Welcome, '+u.name+'</h2><p style="color:#565959;margin-top:8px">Email: '+u.email+'</p><p style="color:#565959">Role: '+u.role+'</p><button class="btn btn-danger" style="margin-top:12px" onclick="logout()">Logout</button>';}
-  else{el.innerHTML='<h2>Not logged in</h2><p style="margin:10px 0"><a href="login.html">Login</a> or <a href="signup.html">Create Account</a></p>';}
-});
-</script>
+<div class="breadcrumb"><a href="index.html">Home</a> / Best Sellers</div>
+<h1 style="margin:20px 0 10px;font-size:28px">🏆 Best Sellers</h1>
+<p style="color:#565959;margin-bottom:20px">Our most popular products based on sales and ratings</p>
+<div class="product-grid" id="bestgrid"></div>
 
 </div>
 <div class="footer">

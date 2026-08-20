@@ -3,9 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Account - Fahd Shop</title>
+<title>Today's Deals - Fahd Shop</title>
 <link rel="stylesheet" href="style.css">
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  fetch('/api/products').then(r=>r.json()).then(products => {
+    var onSale = products.filter(p => p.onSale);
+    var notSale = products.filter(p => !p.onSale);
+    var dealsEl = document.getElementById('deals');
+    var lightEl = document.getElementById('lightning');
+    function render(arr, el) {
+      if(!el) return;
+      el.innerHTML = arr.map(p => {
+        var stars='';var r=Math.round(p.rating||0);for(var i=0;i<r;i++)stars+='\u2605';for(var j=r;j<5;j++)stars+='\u2606';
+        var pct = p.onSale ? p.salePercent : Math.floor(Math.random()*20+5);
+        return '<div class="product-card" onclick="location.href=\'product.html?id='+p.id+'\'"><div class="img-wrap">'+(p.image||'\uD83D\uDCE6')+'</div><div class="info"><div class="title">'+p.name+'</div><div class="stars"><span class="star-color">'+stars+'</span><span class="count">('+p.reviews+')</span></div><div class="price"><span class="current">$'+p.price+'</span>'+(p.oldPrice?'<span class="old">$'+p.oldPrice+'</span>':'')+' <span class="badge">-'+pct+'%</span></div>'+(p.prime?'<div class="prime">✓ Prime</div>':'')+'<button class="btn-cart" onclick="event.stopPropagation();addToCart('+p.id+')">Add to Cart</button></div></div>';
+      }).join('') || '<p style="grid-column:1/-1;text-align:center;color:#666;padding:40px">No deals available right now. Check back later!</p>';
+    }
+    render(onSale.length ? onSale : products.slice(0,6), dealsEl);
+    render(notSale.length ? notSale.slice(0,4) : products.slice(6,10), lightEl);
+  });
+});
+</script>
 </head>
 <body>
 <div class="top-bar">
@@ -33,23 +52,14 @@
 </div>
 <div class="container">
 
-<div class="breadcrumb"><a href="index.html">Home</a> / My Account</div>
-<h1 style="margin:20px 0 10px;font-size:28px">👤 My Account</h1>
-<div class="feature-grid">
-  <div class="feature-box" onclick="location.href='orders.html'" style="cursor:pointer"><div class="icon">📦</div><h3>My Orders</h3><p>Track and manage your orders</p></div>
-  <div class="feature-box" onclick="location.href='wishlist.html'" style="cursor:pointer"><div class="icon">♡</div><h3>Wishlist</h3><p>Items you saved for later</p></div>
-  <div class="feature-box" onclick="location.href='cart.html'" style="cursor:pointer"><div class="icon">🛒</div><h3>Cart</h3><p>Review your shopping cart</p></div>
-  <div class="feature-box" onclick="location.href='login.html'" style="cursor:pointer"><div class="icon">🔑</div><h3>Login / Signup</h3><p>Manage your credentials</p></div>
+<div class="breadcrumb"><a href="index.html">Home</a> / Today's Deals</div>
+<div class="deal-banner">
+  <div><h2>🔥 Today's Deals</h2><p>Massive savings on top products — limited time only!</p></div>
 </div>
-<div class="card" id="userInfo"></div>
-<script>
-document.addEventListener('DOMContentLoaded',function(){
-  var u=JSON.parse(localStorage.getItem('fahd_user')||'null');
-  var el=document.getElementById('userInfo');
-  if(u){el.innerHTML='<h2>Welcome, '+u.name+'</h2><p style="color:#565959;margin-top:8px">Email: '+u.email+'</p><p style="color:#565959">Role: '+u.role+'</p><button class="btn btn-danger" style="margin-top:12px" onclick="logout()">Logout</button>';}
-  else{el.innerHTML='<h2>Not logged in</h2><p style="margin:10px 0"><a href="login.html">Login</a> or <a href="signup.html">Create Account</a></p>';}
-});
-</script>
+<div class="section-header"><h2>Deals of the Day</h2></div>
+<div class="product-grid" id="deals"></div>
+<div class="section-header"><h2>Lightning Deals</h2></div>
+<div class="product-grid" id="lightning"></div>
 
 </div>
 <div class="footer">

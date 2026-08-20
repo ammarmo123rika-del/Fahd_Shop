@@ -1,36 +1,43 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Create Account - My Store</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="header">
-  <div class="header-top">
-    <a class="logo" href="index.html">My<span>Store</span></a>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Create Account - Fahd Shop</title><link rel="stylesheet" href="style.css"></head><body><div class="top-bar">
+  <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+  <div class="search-bar">
+    <input type="text" placeholder="Search Fahd Shop" id="searchInput" onkeydown="if(event.key==='Enter'){location.href='products.html?search='+this.value}">
+    <button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button>
+  </div>
+  <div class="top-links">
+    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account</b></a>
+    <a href="orders.html"><span class="greeting">Returns</span><br><b>& Orders</b></a>
+    <a href="cart.html" class="cart-link">🛒<span class="cart-count" id="cartCount" style="display:none">0</span></a>
   </div>
 </div>
-<main style="padding:50px 20px;min-height:70vh;display:flex;align-items:center;justify-content:center">
-  <div class="form-card">
-    <h1>✨ Create Account</h1>
-    <p class="subtitle">Join My Store and start shopping today</p>
-    <label for="name">Your Name</label>
-    <input type="text" id="name" placeholder="Fahd">
-    <label for="email">Email Address</label>
-    <input type="email" id="email" placeholder="your@email.com">
-    <label for="password">Password</label>
-    <input type="password" id="password" placeholder="At least 4 characters" onkeydown="if(event.key==='Enter')signup()">
-    <button class="btn-amazon" onclick="signup()">Create Account</button>
-    <div id="msg"></div>
-    <hr style="margin:24px 0;border:none;border-top:1px solid #e8e8e8">
-    <div style="text-align:center">
-      <p style="font-size:14px;color:#666;margin-bottom:12px">Already have an account?</p>
-      <a href="login.html" class="btn-amazon btn-block" style="text-decoration:none;text-align:center;display:block;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:0 8px 30px rgba(102,126,234,0.3)">Sign In</a>
-    </div>
+<div class="subnav">
+  <a href="index.html">☰ All</a>
+  <a href="deals.html">Today's Deals <span class="deals-badge">HOT</span></a>
+  <a href="bestsellers.html">Best Sellers</a>
+  <a href="categories.html">Categories</a>
+  <a href="books.html">Books</a>
+  <a href="giftcards.html">Gift Cards</a>
+  <a href="products.html">All Products</a>
+  <a href="returns.html">Help</a>
+  <a href="ai.html" style="color:#ff9900">🤖 AI Assistant</a>
+</div><div class="container"><div class="breadcrumb"><a href="index.html">Home</a> / Create Account</div>
+<div style="max-width:400px;margin:40px auto">
+  <div class="card">
+    <h1 style="margin-bottom:16px;text-align:center">Create Account</h1>
+    <div class="form-group"><label>Full Name</label><input id="name" type="text" placeholder="Ahmed Mohammed"></div>
+    <div class="form-group"><label>Email</label><input id="email" type="email" placeholder="ahmed@example.com"></div>
+    <div class="form-group"><label>Password</label><input id="password" type="password" placeholder="••••••••"></div>
+    <button class="btn btn-primary btn-block" onclick="signup()">Create Account</button>
+    <p id="msg" style="margin-top:8px;font-size:13px;text-align:center"></p>
+    <p style="text-align:center;margin-top:12px;font-size:13px">Already have an account? <a href="login.html">Login</a></p>
   </div>
-</main>
-<script src="app.js"></script>
-</body>
-</html>
+</div></div><div class="footer">
+  <div class="footer-back" onclick="window.scrollTo(0,0)">Back to top</div>
+  <div class="footer-grid">
+    <div><h4>Get to Know Us</h4><a href="about.html">About Fahd Shop</a><a href="contact.html">Contact Us</a><a href="ai.html">AI Assistant</a></div>
+    <div><h4>Make Money with Us</h4><a href="admin.html">Sell on Fahd Shop</a><a href="admin.html">Host Dashboard</a></div>
+    <div><h4>Help & Support</h4><a href="returns.html">Returns & Refunds</a><a href="contact.html">Contact Us</a></div>
+    <div><h4>Your Account</h4><a href="account.html">Your Account</a><a href="orders.html">Your Orders</a><a href="wishlist.html">Wishlist</a><a href="cart.html">Cart</a></div>
+  </div>
+  <div class="footer-bottom"><div class="logo">Fahd<span>Shop</span></div><p>© 2026 Fahd Shop. All rights reserved.</p></div>
+</div><script src="app.js"></script><script>updateCartCount()</script></body></html>

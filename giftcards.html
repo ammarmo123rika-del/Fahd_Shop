@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Account - Fahd Shop</title>
+<title>Gift Cards - Fahd Shop</title>
 <link rel="stylesheet" href="style.css">
 
 </head>
@@ -33,23 +33,37 @@
 </div>
 <div class="container">
 
-<div class="breadcrumb"><a href="index.html">Home</a> / My Account</div>
-<h1 style="margin:20px 0 10px;font-size:28px">👤 My Account</h1>
-<div class="feature-grid">
-  <div class="feature-box" onclick="location.href='orders.html'" style="cursor:pointer"><div class="icon">📦</div><h3>My Orders</h3><p>Track and manage your orders</p></div>
-  <div class="feature-box" onclick="location.href='wishlist.html'" style="cursor:pointer"><div class="icon">♡</div><h3>Wishlist</h3><p>Items you saved for later</p></div>
-  <div class="feature-box" onclick="location.href='cart.html'" style="cursor:pointer"><div class="icon">🛒</div><h3>Cart</h3><p>Review your shopping cart</p></div>
-  <div class="feature-box" onclick="location.href='login.html'" style="cursor:pointer"><div class="icon">🔑</div><h3>Login / Signup</h3><p>Manage your credentials</p></div>
+<div class="breadcrumb"><a href="index.html">Home</a> / Gift Cards</div>
+<h1 style="margin:20px 0 10px;font-size:28px">🎁 Gift Cards</h1>
+<p style="color:#565959;margin-bottom:30px">Give the gift of choice. Fahd Shop gift cards never expire.</p>
+<div class="cat-grid">
+  <div class="cat-card" style="cursor:pointer;border:2px solid var(--primary)">
+    <div class="icon">💳</div><h3>$25 Gift Card</h3><p style="color:var(--price);font-weight:700;font-size:18px">$25.00</p>
+    <button class="btn" style="margin-top:12px" onclick="alert('Gift card added!')">Buy Now</button>
+  </div>
+  <div class="cat-card" style="cursor:pointer;border:2px solid var(--primary)">
+    <div class="icon">💳</div><h3>$50 Gift Card</h3><p style="color:var(--price);font-weight:700;font-size:18px">$50.00</p>
+    <button class="btn" style="margin-top:12px" onclick="alert('Gift card added!')">Buy Now</button>
+  </div>
+  <div class="cat-card" style="cursor:pointer;border:2px solid var(--primary)">
+    <div class="icon">💎</div><h3>$100 Gift Card</h3><p style="color:var(--price);font-weight:700;font-size:18px">$100.00</p>
+    <button class="btn" style="margin-top:12px" onclick="alert('Gift card added!')">Buy Now</button>
+  </div>
+  <div class="cat-card" style="cursor:pointer;border:2px solid var(--primary)">
+    <div class="icon">✨</div><h3>Custom Amount</h3><p style="color:var(--muted)">Choose any amount</p>
+    <button class="btn" style="margin-top:12px" onclick="var a=prompt('Enter amount ($5-$500):');if(a)alert('$'+a+' gift card added!')">Custom</button>
+  </div>
 </div>
-<div class="card" id="userInfo"></div>
-<script>
-document.addEventListener('DOMContentLoaded',function(){
-  var u=JSON.parse(localStorage.getItem('fahd_user')||'null');
-  var el=document.getElementById('userInfo');
-  if(u){el.innerHTML='<h2>Welcome, '+u.name+'</h2><p style="color:#565959;margin-top:8px">Email: '+u.email+'</p><p style="color:#565959">Role: '+u.role+'</p><button class="btn btn-danger" style="margin-top:12px" onclick="logout()">Logout</button>';}
-  else{el.innerHTML='<h2>Not logged in</h2><p style="margin:10px 0"><a href="login.html">Login</a> or <a href="signup.html">Create Account</a></p>';}
-});
-</script>
+<div class="card" style="margin-top:20px">
+  <h3 style="margin-bottom:10px">📋 Gift Card Terms</h3>
+  <ul style="padding-left:20px;color:#565959;font-size:14px;line-height:2">
+    <li>Fahd Shop gift cards never expire</li>
+    <li>Redeemable on any product in the store</li>
+    <li>Delivered instantly via email</li>
+    <li>No fees or hidden charges</li>
+    <li>Can be combined with other payment methods</li>
+  </ul>
+</div>
 
 </div>
 <div class="footer">

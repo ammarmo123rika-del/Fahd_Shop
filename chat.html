@@ -1,48 +1,44 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Chat - My Store</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="header">
-  <div class="header-top">
-    <a class="logo" href="index.html">My<span>Store</span></a>
-    <div class="header-links">
-      <a class="loginLink" href="login.html"><span class="label">Hello, Sign in</span><span class="value">Account</span></a>
-      <a href="cart.html" class="cart-link"><span class="value">🛒</span><span class="cart-count" id="cartCount" style="display:none">0</span></a>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chat with Host - Fahd Shop</title><link rel="stylesheet" href="style.css"></head><body><div class="top-bar">
+  <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+  <div class="search-bar">
+    <input type="text" placeholder="Search Fahd Shop" id="searchInput" onkeydown="if(event.key==='Enter'){location.href='products.html?search='+this.value}">
+    <button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button>
+  </div>
+  <div class="top-links">
+    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account</b></a>
+    <a href="orders.html"><span class="greeting">Returns</span><br><b>& Orders</b></a>
+    <a href="cart.html" class="cart-link">🛒<span class="cart-count" id="cartCount" style="display:none">0</span></a>
+  </div>
+</div>
+<div class="subnav">
+  <a href="index.html">☰ All</a>
+  <a href="deals.html">Today's Deals <span class="deals-badge">HOT</span></a>
+  <a href="bestsellers.html">Best Sellers</a>
+  <a href="categories.html">Categories</a>
+  <a href="books.html">Books</a>
+  <a href="giftcards.html">Gift Cards</a>
+  <a href="products.html">All Products</a>
+  <a href="returns.html">Help</a>
+  <a href="ai.html" style="color:#ff9900">🤖 AI Assistant</a>
+</div><div class="container"><div class="breadcrumb"><a href="index.html">Home</a> / Chat</div>
+<h1 style="margin:20px 0 10px;font-size:28px">💬 Chat with Host</h1>
+<div style="display:flex;gap:16px;min-height:400px">
+  <div class="card" style="width:250px;flex:none;overflow-y:auto" id="chatUsers"></div>
+  <div class="card" style="flex:1;display:flex;flex-direction:column">
+    <div style="flex:1;overflow-y:auto;padding:10px" id="chatMessages"></div>
+    <div style="display:flex;gap:8px;padding:12px;border-top:1px solid var(--border)">
+      <input id="chatInput" style="flex:1;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:14px" placeholder="Type your message..." onkeydown="if(event.key==='Enter')sendChatMessage()">
+      <button class="btn btn-primary" onclick="sendChatMessage()">Send 📨</button>
     </div>
   </div>
 </div>
-<div class="nav-bar"><div class="nav-bar-inner">
-  <a href="index.html">🏠 Home</a><a href="products.html">🛍️ Products</a><a href="chat.html" class="active">💬 Chat</a><a href="admin.html" class="hostLink">⚙️ Host Panel</a>
-</div></div>
-<section>
-  <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;padding:30px 40px;margin-bottom:24px;color:#fff;box-shadow:0 10px 40px rgba(102,126,234,0.3)">
-    <h1 style="font-size:32px">💬 Chat with Host</h1>
-    <p style="opacity:0.9">Ask questions, request support, or negotiate prices!</p>
+<script>document.addEventListener("DOMContentLoaded",function(){renderChat();setInterval(function(){var u=getCurrentUser();if(u&&window.currentChatWith)loadMessages(window.currentChatWith);},3000);});</script></div><div class="footer">
+  <div class="footer-back" onclick="window.scrollTo(0,0)">Back to top</div>
+  <div class="footer-grid">
+    <div><h4>Get to Know Us</h4><a href="about.html">About Fahd Shop</a><a href="contact.html">Contact Us</a><a href="ai.html">AI Assistant</a></div>
+    <div><h4>Make Money with Us</h4><a href="admin.html">Sell on Fahd Shop</a><a href="admin.html">Host Dashboard</a></div>
+    <div><h4>Help & Support</h4><a href="returns.html">Returns & Refunds</a><a href="contact.html">Contact Us</a></div>
+    <div><h4>Your Account</h4><a href="account.html">Your Account</a><a href="orders.html">Your Orders</a><a href="wishlist.html">Wishlist</a><a href="cart.html">Cart</a></div>
   </div>
-  <div class="chat-container">
-    <div class="chat-sidebar" id="chatUsers"></div>
-    <div class="chat-main">
-      <div class="chat-messages" id="chatMessages"></div>
-      <div class="chat-input-bar">
-        <input type="text" id="chatInput" placeholder="Type your message..." onkeydown="if(event.key==='Enter')sendChatMessage()">
-        <button class="btn" onclick="sendChatMessage()">Send 📨</button>
-      </div>
-    </div>
-  </div>
-</section>
-<footer><p>© 2026 My Store.</p></footer>
-<script src="app.js"></script>
-<script>
-renderChat();
-setInterval(function(){
-  var u = getCurrentUser();
-  if(u && window.currentChatWith) loadMessages(window.currentChatWith);
-}, 3000);
-</script>
-</body>
-</html>
+  <div class="footer-bottom"><div class="logo">Fahd<span>Shop</span></div><p>© 2026 Fahd Shop. All rights reserved.</p></div>
+</div><script src="app.js"></script><script>updateCartCount()</script></body></html>

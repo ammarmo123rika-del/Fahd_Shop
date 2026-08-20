@@ -1,5 +1,87 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Product - Fahd Shop</title><link rel="stylesheet" href="style.css"></head><body><header><a class="logo" href="index.html">Fahd Shop</a><nav>
-<a href="index.html">Home</a><a href="products.html">Products</a><a href="categories.html">Categories</a>
-<a href="books.html">Books</a><a href="cart.html">Cart</a><a href="account.html">Account</a>
-<a href="orders.html">Orders</a><a href="contact.html">Contact</a><a href="login.html">Login</a><a href="admin.html">Host</a>
-</nav></header><main><h1>Product Details</h1><div id='product'></div></main><script src='app.js'></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Product - Fahd Shop</title>
+<link rel="stylesheet" href="style.css">
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var id = new URLSearchParams(location.search).get('id');
+  if (!id) { document.getElementById('pd').innerHTML = '<div class="empty"><div class="icon">📦</div><h2>Product not found</h2><a href="products.html">Browse Products →</a></div>'; return; }
+  fetch('/api/products').then(r=>r.json()).then(function(products) {
+    var p = products.find(x => x.id == id);
+    if (!p) { document.getElementById('pd').innerHTML = '<div class="empty"><div class="icon">📦</div><h2>Product not found</h2><a href="products.html">Browse Products →</a></div>'; return; }
+    document.getElementById('bcName').textContent = p.name;
+    document.title = p.name + ' - Fahd Shop';
+    var stars='';var r=Math.round(p.rating||0);for(var i=0;i<r;i++)stars+='\u2605';for(var j=r;j<5;j++)stars+='\u2606';
+    var save = p.oldPrice ? (p.oldPrice - p.price).toFixed(2) : 0;
+    document.getElementById('pd').innerHTML = '<div class="pd-grid"><div class="pd-img">'+(p.image||'\uD83D\uDCE6')+'</div><div class="pd-info"><h1>'+p.name+'</h1><div class="stars"><span class="star-color">'+stars+'</span><span class="count">('+p.reviews+' reviews)</span></div><div class="price-box"><span class="current">$'+p.price+'</span>'+(p.oldPrice?'<span class="old">$'+p.oldPrice+'</span><span class="save">You save: $'+save+'</span>':'')+'</div>'+(p.onSale?'<div style="background:#cc0c35;color:#fff;display:inline-block;padding:4px 12px;border-radius:6px;font-size:13px;font-weight:700;margin:8px 0">🔥 Deal: -'+p.salePercent+'% off</div>':'')+'<div class="desc">'+p.desc+'</div><div class="stock"><span class="'+(p.stock>0?'in':'out')+'">'+(p.stock>0?'✓ In Stock ('+p.stock+' available)':'✗ Out of Stock')+'</span></div>'+(p.prime?'<div class="prime">✓ Prime — Free Fast Delivery</div>':'')+'<div class="pd-buy"><div class="price" style="font-size:14px;color:#565959">Price: <b style="color:var(--price);font-size:22px">$'+p.price+'</b></div><button class="btn btn-primary btn-block" onclick="addToCart('+p.id+')">Add to Cart</button><button class="btn btn-block" style="margin-top:8px;background:#ffa41c;border-color:#ff8f00" onclick="addToCart('+p.id+');location.href=\'cart.html\'">Buy Now</button><a href="wishlist.html" style="display:block;text-align:center;margin-top:10px;font-size:13px">♡ Add to Wishlist</a></div></div></div>';
+  });
+});
+</script>
+</head>
+<body>
+<div class="top-bar">
+  <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+  <div class="search-bar">
+    <input type="text" placeholder="Search Fahd Shop" id="searchInput" onkeydown="if(event.key==='Enter'){location.href='products.html?search='+this.value}">
+    <button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button>
+  </div>
+  <div class="top-links">
+    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account</b></a>
+    <a href="orders.html"><span class="greeting">Returns</span><br><b>& Orders</b></a>
+    <a href="cart.html" class="cart-link">🛒<span class="cart-count" id="cartCount" style="display:none">0</span></a>
+  </div>
+</div>
+<div class="subnav">
+  <a href="index.html" class="active">☰ All</a>
+  <a href="deals.html">Today's Deals <span class="deals-badge">HOT</span></a>
+  <a href="bestsellers.html">Best Sellers</a>
+  <a href="categories.html">Categories</a>
+  <a href="books.html">Books</a>
+  <a href="giftcards.html">Gift Cards</a>
+  <a href="products.html">All Products</a>
+  <a href="returns.html">Help</a>
+  <a href="ai.html" style="color:#ff9900">🤖 AI Assistant</a>
+</div>
+<div class="container">
+
+<div class="breadcrumb"><a href="index.html">Home</a> / <a href="products.html">Products</a> / <span id="bcName">Product</span></div>
+<div id="pd"></div>
+
+</div>
+<div class="footer">
+  <div class="footer-back" onclick="window.scrollTo(0,0)">Back to top</div>
+  <div class="footer-grid">
+    <div><h4>Get to Know Us</h4>
+      <a href="about.html">About Fahd Shop</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="ai.html">AI Assistant</a>
+    </div>
+    <div><h4>Make Money with Us</h4>
+      <a href="admin.html">Sell on Fahd Shop</a>
+      <a href="admin.html">Host Dashboard</a>
+      <a href="products.html">Advertise Products</a>
+    </div>
+    <div><h4>Help & Support</h4>
+      <a href="returns.html">Returns & Refunds</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="returns.html">FAQ</a>
+    </div>
+    <div><h4>Your Account</h4>
+      <a href="account.html">Your Account</a>
+      <a href="orders.html">Your Orders</a>
+      <a href="wishlist.html">Your Wishlist</a>
+      <a href="cart.html">Your Cart</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="logo">Fahd<span>Shop</span></div>
+    <p>© 2026 Fahd Shop. All rights reserved. | <a href="about.html" style="color:#999">Privacy</a> | <a href="about.html" style="color:#999">Terms</a></p>
+  </div>
+</div>
+<script src="app.js"></script>
+<script>updateCartCount()</script>
+</body>
+</html>

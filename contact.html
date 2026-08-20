@@ -1,5 +1,94 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contact - Fahd Shop</title><link rel="stylesheet" href="style.css"></head><body><header><a class="logo" href="index.html">Fahd Shop</a><nav>
-<a href="index.html">Home</a><a href="products.html">Products</a><a href="categories.html">Categories</a>
-<a href="books.html">Books</a><a href="cart.html">Cart</a><a href="account.html">Account</a>
-<a href="orders.html">Orders</a><a href="contact.html">Contact</a><a href="login.html">Login</a><a href="admin.html">Host</a>
-</nav></header><main><h1>Contact Us</h1><p>Email: fahdm19573@gmil.com</p><form><input placeholder='Your name'><input placeholder='Your email'><textarea placeholder='Message'></textarea><button>Send</button></form></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contact Us - Fahd Shop</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<div class="top-bar">
+  <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+  <div class="search-bar">
+    <input type="text" placeholder="Search Fahd Shop" id="searchInput" onkeydown="if(event.key==='Enter'){location.href='products.html?search='+this.value}">
+    <button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button>
+  </div>
+  <div class="top-links">
+    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account</b></a>
+    <a href="orders.html"><span class="greeting">Returns</span><br><b>& Orders</b></a>
+    <a href="cart.html" class="cart-link">🛒<span class="cart-count" id="cartCount" style="display:none">0</span></a>
+  </div>
+</div>
+<div class="subnav">
+  <a href="index.html" class="active">☰ All</a>
+  <a href="deals.html">Today's Deals <span class="deals-badge">HOT</span></a>
+  <a href="bestsellers.html">Best Sellers</a>
+  <a href="categories.html">Categories</a>
+  <a href="books.html">Books</a>
+  <a href="giftcards.html">Gift Cards</a>
+  <a href="products.html">All Products</a>
+  <a href="returns.html">Help</a>
+  <a href="ai.html" style="color:#ff9900">🤖 AI Assistant</a>
+</div>
+<div class="container">
+
+<div class="breadcrumb"><a href="index.html">Home</a> / Contact Us</div>
+<h1 style="margin:20px 0 10px;font-size:28px">💬 Contact Us</h1>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+  <div class="card">
+    <h2>Send a Message</h2>
+    <div class="form-group"><label>Your Name</label><input id="cname" type="text" placeholder="Ahmed"></div>
+    <div class="form-group"><label>Your Email</label><input id="cemail" type="email" placeholder="ahmed@example.com"></div>
+    <div class="form-group"><label>Message</label><textarea id="ctext" rows="5" placeholder="How can we help you?"></textarea></div>
+    <button class="btn btn-primary" onclick="sendContact()">Send Message</button>
+    <p id="cmsg" style="margin-top:8px;font-size:13px"></p>
+  </div>
+  <div class="card">
+    <h2>Other Ways to Reach Us</h2>
+    <div style="font-size:14px;line-height:2.2">
+      <p>📧 <b>Email:</b> support@fahdshop.com</p>
+      <p>📱 <b>WhatsApp:</b> +20 123 456 7890</p>
+      <p>🕐 <b>Hours:</b> 9 AM - 9 PM (Sun-Thu)</p>
+      <p>📍 <b>Location:</b> Cairo, Egypt</p>
+    </div>
+    <div style="margin-top:16px"><a href="returns.html" class="btn" style="display:inline-block">Help Center →</a></div>
+    <div style="margin-top:12px"><a href="ai.html" class="btn btn-primary" style="display:inline-block">🤖 Chat with AI</a></div>
+  </div>
+</div>
+
+</div>
+<div class="footer">
+  <div class="footer-back" onclick="window.scrollTo(0,0)">Back to top</div>
+  <div class="footer-grid">
+    <div><h4>Get to Know Us</h4>
+      <a href="about.html">About Fahd Shop</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="ai.html">AI Assistant</a>
+    </div>
+    <div><h4>Make Money with Us</h4>
+      <a href="admin.html">Sell on Fahd Shop</a>
+      <a href="admin.html">Host Dashboard</a>
+      <a href="products.html">Advertise Products</a>
+    </div>
+    <div><h4>Help & Support</h4>
+      <a href="returns.html">Returns & Refunds</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="returns.html">FAQ</a>
+    </div>
+    <div><h4>Your Account</h4>
+      <a href="account.html">Your Account</a>
+      <a href="orders.html">Your Orders</a>
+      <a href="wishlist.html">Your Wishlist</a>
+      <a href="cart.html">Your Cart</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="logo">Fahd<span>Shop</span></div>
+    <p>© 2026 Fahd Shop. All rights reserved. | <a href="about.html" style="color:#999">Privacy</a> | <a href="about.html" style="color:#999">Terms</a></p>
+  </div>
+</div>
+<script src="app.js"></script>
+<script>updateCartCount()</script>
+</body>
+</html>

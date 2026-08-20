@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Returns & Help - Fahd Shop</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<div class="top-bar">
+  <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+  <div class="search-bar">
+    <input type="text" placeholder="Search Fahd Shop" id="searchInput" onkeydown="if(event.key==='Enter'){location.href='products.html?search='+this.value}">
+    <button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button>
+  </div>
+  <div class="top-links">
+    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account</b></a>
+    <a href="orders.html"><span class="greeting">Returns</span><br><b>& Orders</b></a>
+    <a href="cart.html" class="cart-link">🛒<span class="cart-count" id="cartCount" style="display:none">0</span></a>
+  </div>
+</div>
+<div class="subnav">
+  <a href="index.html" class="active">☰ All</a>
+  <a href="deals.html">Today's Deals <span class="deals-badge">HOT</span></a>
+  <a href="bestsellers.html">Best Sellers</a>
+  <a href="categories.html">Categories</a>
+  <a href="books.html">Books</a>
+  <a href="giftcards.html">Gift Cards</a>
+  <a href="products.html">All Products</a>
+  <a href="returns.html">Help</a>
+  <a href="ai.html" style="color:#ff9900">🤖 AI Assistant</a>
+</div>
+<div class="container">
+
+<div class="breadcrumb"><a href="index.html">Home</a> / Returns & Help</div>
+<h1 style="margin:20px 0 10px;font-size:28px">📋 Returns & Help Center</h1>
+
+<div class="feature-grid" style="margin:20px 0">
+  <div class="feature-box" style="cursor:pointer" onclick="document.getElementById('returns').scrollIntoView()">
+    <div class="icon">↩️</div><h3>Returns</h3><p>How to return an item</p>
+  </div>
+  <div class="feature-box" style="cursor:pointer" onclick="document.getElementById('shipping').scrollIntoView()">
+    <div class="icon">🚚</div><h3>Shipping</h3><p>Delivery info & tracking</p>
+  </div>
+  <div class="feature-box" style="cursor:pointer" onclick="document.getElementById('faq').scrollIntoView()">
+    <div class="icon">❓</div><h3>FAQ</h3><p>Frequently asked questions</p>
+  </div>
+  <div class="feature-box" style="cursor:pointer" onclick="location.href='contact.html'">
+    <div class="icon">💬</div><h3>Contact Us</h3><p>Chat or email support</p>
+  </div>
+</div>
+
+<div class="card" id="returns">
+  <h2 style="margin-bottom:12px">↩️ Returns & Refunds</h2>
+  <h3 style="margin:12px 0 6px">Return Policy</h3>
+  <p style="color:#565959;font-size:14px;line-height:1.8">Most items can be returned within <b>30 days</b> of delivery for a full refund. Items must be in original condition with tags attached.</p>
+  <h3 style="margin:12px 0 6px">How to Return</h3>
+  <ol style="padding-left:20px;color:#565959;font-size:14px;line-height:2">
+    <li>Go to <a href="orders.html">Your Orders</a></li>
+    <li>Select the item you want to return</li>
+    <li>Choose a return reason</li>
+    <li>Print the return label</li>
+    <li>Pack and drop off at any shipping location</li>
+  </ol>
+  <h3 style="margin:12px 0 6px">Refund Timeline</h3>
+  <p style="color:#565959;font-size:14px">Refunds are processed within <b>3-5 business days</b> after we receive the returned item.</p>
+</div>
+
+<div class="card" id="shipping">
+  <h2 style="margin-bottom:12px">🚚 Shipping Information</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+    <div style="padding:16px;background:#f7f7f7;border-radius:8px;text-align:center"><div style="font-size:28px;margin-bottom:8px">📦</div><b>Standard</b><p style="color:#565959;font-size:13px">5-7 business days<br>Free on orders $25+</p></div>
+    <div style="padding:16px;background:#f7f7f7;border-radius:8px;text-align:center"><div style="font-size:28px;margin-bottom:8px">⚡</div><b>Express</b><p style="color:#565959;font-size:13px">2-3 business days<br>$9.99</p></div>
+    <div style="padding:16px;background:#f7f7f7;border-radius:8px;text-align:center"><div style="font-size:28px;margin-bottom:8px">🚀</div><b>Next Day</b><p style="color:#565959;font-size:13px">Next business day<br>$19.99</p></div>
+  </div>
+</div>
+
+<div class="card" id="faq">
+  <h2 style="margin-bottom:12px">❓ Frequently Asked Questions</h2>
+  <div style="font-size:14px;line-height:2">
+    <p><b>Q: How do I track my order?</b></p><p style="color:#565959;margin-bottom:12px">A: Go to <a href="orders.html">Your Orders</a> and click on the order to see tracking info.</p>
+    <p><b>Q: Can I cancel my order?</b></p><p style="color:#565959;margin-bottom:12px">A: Orders can be cancelled within 1 hour of placement. Go to Your Orders and click Cancel.</p>
+    <p><b>Q: How do I change my address?</b></p><p style="color:#565959;margin-bottom:12px">A: Go to <a href="account.html">Your Account</a> → Addresses to add or edit.</p>
+    <p><b>Q: Do you ship internationally?</b></p><p style="color:#565959;margin-bottom:12px">A: Currently we ship to select countries. Check at checkout for availability.</p>
+    <p><b>Q: How do I contact support?</b></p><p style="color:#565959;margin-bottom:12px">A: Visit our <a href="contact.html">Contact page</a> or chat with our <a href="ai.html">AI Assistant</a>.</p>
+  </div>
+</div>
+
+</div>
+<div class="footer">
+  <div class="footer-back" onclick="window.scrollTo(0,0)">Back to top</div>
+  <div class="footer-grid">
+    <div><h4>Get to Know Us</h4>
+      <a href="about.html">About Fahd Shop</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="ai.html">AI Assistant</a>
+    </div>
+    <div><h4>Make Money with Us</h4>
+      <a href="admin.html">Sell on Fahd Shop</a>
+      <a href="admin.html">Host Dashboard</a>
+      <a href="products.html">Advertise Products</a>
+    </div>
+    <div><h4>Help & Support</h4>
+      <a href="returns.html">Returns & Refunds</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="returns.html">FAQ</a>
+    </div>
+    <div><h4>Your Account</h4>
+      <a href="account.html">Your Account</a>
+      <a href="orders.html">Your Orders</a>
+      <a href="wishlist.html">Your Wishlist</a>
+      <a href="cart.html">Your Cart</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="logo">Fahd<span>Shop</span></div>
+    <p>© 2026 Fahd Shop. All rights reserved. | <a href="about.html" style="color:#999">Privacy</a> | <a href="about.html" style="color:#999">Terms</a></p>
+  </div>
+</div>
+<script src="app.js"></script>
+<script>updateCartCount()</script>
+</body>
+</html>

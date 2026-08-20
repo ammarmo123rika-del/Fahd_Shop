@@ -1,9 +1,93 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Products - Fahd Shop</title><link rel="stylesheet" href="style.css"></head>
-<body><header><a class="logo" href="index.html">Fahd Shop</a><nav>
-<a href="index.html">Home</a><a href="products.html">Products</a><a href="categories.html">Categories</a>
-<a href="books.html">Books</a><a href="cart.html">Cart</a><a href="account.html">Account</a>
-<a href="orders.html">Orders</a><a href="contact.html">Contact</a><a href="login.html">Login</a><a href="admin.html">Host</a>
-</nav></header>
-<main><h1>Products</h1><input id="search" class="search" placeholder="Search products..." oninput="renderProducts('products')"><div id="products" class="grid"></div></main>
-<script src="app.js"></script><script>renderProducts("products")</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Products - Fahd Shop</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<div class="top-bar">
+  <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+  <div class="search-bar">
+    <input type="text" placeholder="Search Fahd Shop" id="searchInput" onkeydown="if(event.key==='Enter'){location.href='products.html?search='+this.value}">
+    <button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button>
+  </div>
+  <div class="top-links">
+    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account</b></a>
+    <a href="orders.html"><span class="greeting">Returns</span><br><b>& Orders</b></a>
+    <a href="cart.html" class="cart-link">🛒<span class="cart-count" id="cartCount" style="display:none">0</span></a>
+  </div>
+</div>
+<div class="subnav">
+  <a href="index.html" class="active">☰ All</a>
+  <a href="deals.html">Today's Deals <span class="deals-badge">HOT</span></a>
+  <a href="bestsellers.html">Best Sellers</a>
+  <a href="categories.html">Categories</a>
+  <a href="books.html">Books</a>
+  <a href="giftcards.html">Gift Cards</a>
+  <a href="products.html">All Products</a>
+  <a href="returns.html">Help</a>
+  <a href="ai.html" style="color:#ff9900">🤖 AI Assistant</a>
+</div>
+<div class="container">
+
+<div class="breadcrumb"><a href="index.html">Home</a> / Products</div>
+<h1 style="margin:20px 0 10px;font-size:28px">🛍️ All Products</h1>
+<div style="display:flex;gap:12px;align-items:center;margin-bottom:20px;flex-wrap:wrap">
+  <input id="search" class="form-group" style="flex:1;min-width:200px;margin:0;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px" placeholder="Search products..." oninput="renderProducts('products')">
+  <select id="catFilter" style="padding:10px;border:1px solid var(--border);border-radius:8px;font-size:14px" onchange="renderProducts('products')"><option value="">All Categories</option></select>
+</div>
+<div class="product-grid" id="products"></div>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var params=new URLSearchParams(location.search);
+  var s=params.get('search');var c=params.get('cat');
+  if(s)document.getElementById('search').value=s;
+  if(c)document.getElementById('catFilter').value=c;
+  fetch('/api/products').then(r=>r.json()).then(function(products){
+    var cats={};products.forEach(function(p){if(p.category)cats[p.category]=1;});
+    var sel=document.getElementById('catFilter');
+    Object.keys(cats).forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);});
+    if(c)sel.value=c;
+    renderProducts('products');
+  });
+});
+</script>
+
+</div>
+<div class="footer">
+  <div class="footer-back" onclick="window.scrollTo(0,0)">Back to top</div>
+  <div class="footer-grid">
+    <div><h4>Get to Know Us</h4>
+      <a href="about.html">About Fahd Shop</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="ai.html">AI Assistant</a>
+    </div>
+    <div><h4>Make Money with Us</h4>
+      <a href="admin.html">Sell on Fahd Shop</a>
+      <a href="admin.html">Host Dashboard</a>
+      <a href="products.html">Advertise Products</a>
+    </div>
+    <div><h4>Help & Support</h4>
+      <a href="returns.html">Returns & Refunds</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="returns.html">FAQ</a>
+    </div>
+    <div><h4>Your Account</h4>
+      <a href="account.html">Your Account</a>
+      <a href="orders.html">Your Orders</a>
+      <a href="wishlist.html">Your Wishlist</a>
+      <a href="cart.html">Your Cart</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="logo">Fahd<span>Shop</span></div>
+    <p>© 2026 Fahd Shop. All rights reserved. | <a href="about.html" style="color:#999">Privacy</a> | <a href="about.html" style="color:#999">Terms</a></p>
+  </div>
+</div>
+<script src="app.js"></script>
+<script>updateCartCount()</script>
+</body>
+</html>
