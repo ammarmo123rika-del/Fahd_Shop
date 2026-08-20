@@ -1,5 +1,50 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book Reader - My Store</title><link rel="stylesheet" href="style.css"></head><body><header><a class="logo" href="index.html">My Store</a><nav>
-<a href="index.html">Home</a><a href="products.html">Products</a><a href="categories.html">Categories</a>
-<a href="books.html">Books</a><a href="cart.html">Cart</a><a href="account.html">Account</a>
-<a href="orders.html">Orders</a><a href="contact.html">Contact</a><a href="login.html">Login</a><a href="admin.html">Host</a>
-</nav></header><main><h1>Book Reader</h1><article class='card'><h2>Sample Book</h2><p>This is a demo reading page. Add your own books and legally licensed content here.</p></article></main></body></html>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Book Reader - My Store</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <a class="logo" href="index.html">My<span>Store</span></a>
+    <div class="header-links">
+      <a class="loginLink" href="login.html">
+        <span class="label">Hello, Sign in</span>
+        <span class="value">Account</span>
+      </a>
+      <a href="cart.html" class="cart-link">
+        <span class="value">🛒</span>
+        <span class="cart-count" id="cartCount" style="display:none">0</span>
+      </a>
+    </div>
+  </div>
+</div>
+<div class="nav-bar">
+  <div class="nav-bar-inner">
+    <a href="index.html">🏠 Home</a>
+    <a href="products.html">🛍️ Products</a>
+    <a href="books.html" class="active">📚 Books</a>
+    <a href="wishlist.html">♡ Wishlist</a>
+    <a href="orders.html">📦 My Orders</a>
+  </div>
+</div>
+<section>
+  <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;padding:40px;margin-bottom:28px;color:#fff;box-shadow:0 20px 60px rgba(102,126,234,0.3)">
+    <h1 style="font-size:32px;margin-bottom:8px">📖 Book Reader</h1>
+    <p style="opacity:0.9">Read your purchased books here.</p>
+  </div>
+  <div class="card" style="max-width:700px;padding:40px">
+    <h2 style="margin-bottom:16px">Sample Book</h2>
+    <p style="color:#555;line-height:1.8;margin-bottom:16px">
+      This is a demo reading page. Add your own books and legally licensed content here.
+    </p>
+    <a href="books.html" class="btn btn-outline" style="display:inline-block">← Browse Books</a>
+  </div>
+</section>
+<footer><p>© 2026 My Store.</p></footer>
+<script src="app.js"></script>
+</body>
+</html>

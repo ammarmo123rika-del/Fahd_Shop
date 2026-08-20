@@ -21,7 +21,8 @@ const DEFAULT_PRODUCTS = [
   {id:9,name:"Nintendo Switch OLED",price:349,oldPrice:370,image:"🎮",category:"Gaming",rating:4.8,reviews:7800,prime:true,stock:25,desc:"7-inch OLED screen, wide adjustable stand, enhanced audio.",onSale:false,salePercent:0},
   {id:10,name:"Instant Pot Duo 7-in-1 6Qt",price:79,oldPrice:99,image:"🍲",category:"Home",rating:4.7,reviews:15000,prime:true,stock:60,desc:"Pressure cooker, slow cooker, rice cooker, steamer, sauté, yogurt maker, and warmer.",onSale:false,salePercent:0},
   {id:11,name:"Bose QuietComfort Ultra Earbuds",price:249,oldPrice:299,image:"🎧",category:"Electronics",rating:4.6,reviews:3200,prime:true,stock:35,desc:"World-class noise cancellation with Immersive Audio.",onSale:false,salePercent:0},
-  {id:12,name:"Levi's 501 Original Fit Jeans",price:59,oldPrice:79,image:"👖",category:"Fashion",rating:4.4,reviews:6700,prime:true,stock:80,desc:"The original button fly jean since 1873. Iconic straight leg.",onSale:false,salePercent:0}
+  {id:12,name:"Levi's 501 Original Fit Jeans",price:59,oldPrice:79,image:"👖",category:"Fashion",rating:4.4,reviews:6700,prime:true,stock:80,desc:"The original button fly jean since 1873. Iconic straight leg.",onSale:false,salePercent:0},
+  {id:13,name:"Fahd AI - Next Generation AI Assistant",price:49.99,oldPrice:79.99,image:"🤖",category:"Electronics",rating:5.0,reviews:1,prime:true,stock:100,desc:"Fahd AI is a powerful next-generation AI assistant built by Fahd. Features advanced natural language processing, code generation, and intelligent automation.",onSale:true,salePercent:37}
 ];
 
 function loadData() {
@@ -230,7 +231,12 @@ app.get('/api/sales', function(req, res) {
 });
 
 // ===== STATIC FILES (after all API routes) =====
-app.use(express.static(__dirname));
+app.use(express.static(__dirname, { fallthrough: true }));
+
+// ===== 404 CATCH-ALL =====
+app.use(function(req, res) {
+  res.status(404).type('html').send(fs.readFileSync(path.join(__dirname, '404.html'), 'utf8'));
+});
 
 // ===== START SERVER =====
 app.listen(PORT, function() {

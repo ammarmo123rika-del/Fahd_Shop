@@ -37,6 +37,12 @@
 </section>
 <footer><p>© 2026 My Store.</p></footer>
 <script src="app.js"></script>
-<script>renderChat(); setInterval(()=>{const u=getCurrentUser();if(u&&currentChatWith)loadMessages(currentChatWith)},3000)</script>
+<script>
+renderChat();
+setInterval(function(){
+  var u = getCurrentUser();
+  if(u && window.currentChatWith) loadMessages(window.currentChatWith);
+}, 3000);
+</script>
 </body>
 </html>

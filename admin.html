@@ -27,10 +27,13 @@
 <div class="nav-bar">
   <div class="nav-bar-inner">
     <a href="admin.html" class="active">📊 Dashboard</a>
-    <a href="chat.html">💬 Chat</a>
+    <a href="admin-products.html">📦 Products</a>
+    <a href="admin-orders.html">📋 Orders</a>
+    <a href="admin-customers.html">👥 Customers</a>
+    <a href="admin-settings.html">⚙️ Settings</a>
     <a href="add-product.html">➕ Add Product</a>
+    <a href="chat.html">💬 Chat</a>
     <a href="index.html">🏠 Store Front</a>
-    <a href="orders.html">📦 Orders</a>
   </div>
 </div>
 
@@ -67,6 +70,10 @@
   <!-- Quick Actions -->
   <div style="display:flex;gap:14px;margin-bottom:28px;flex-wrap:wrap">
     <a href="add-product.html" class="btn">➕ Add New Product</a>
+    <a href="admin-products.html" class="btn btn-blue">📦 Manage Products</a>
+    <a href="admin-orders.html" class="btn btn-outline">📋 Manage Orders</a>
+    <a href="admin-customers.html" class="btn btn-outline">👥 View Customers</a>
+    <a href="admin-settings.html" class="btn btn-outline">⚙️ Settings</a>
     <a href="products.html" class="btn btn-outline">👁 View Store</a>
     <button class="btn btn-red" onclick="if(confirm('Reset all products to defaults?')){localStorage.removeItem('shop_products');location.reload()}">🔄 Reset Products</button>
   </div>

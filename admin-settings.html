@@ -1,5 +1,58 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Settings - My Store</title><link rel="stylesheet" href="style.css"></head><body><header><a class="logo" href="index.html">My Store</a><nav>
-<a href="index.html">Home</a><a href="products.html">Products</a><a href="categories.html">Categories</a>
-<a href="books.html">Books</a><a href="cart.html">Cart</a><a href="account.html">Account</a>
-<a href="orders.html">Orders</a><a href="contact.html">Contact</a><a href="login.html">Login</a><a href="admin.html">Host</a>
-</nav></header><main><h1>Store Settings</h1><div class='card'><input placeholder='Store name'><button>Save</button></div></main></body></html>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Settings - My Store</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <a class="logo" href="index.html">My<span>Store</span></a>
+    <div class="header-links">
+      <a class="loginLink" href="login.html">
+        <span class="label">Hello, Host</span>
+        <span class="value">⚙️ Host</span>
+      </a>
+    </div>
+  </div>
+</div>
+<div class="nav-bar">
+  <div class="nav-bar-inner">
+    <a href="admin.html">📊 Dashboard</a>
+    <a href="admin-settings.html" class="active">⚙️ Settings</a>
+    <a href="admin-products.html">📦 Products</a>
+    <a href="orders.html">📦 Orders</a>
+    <a href="chat.html">💬 Chat</a>
+    <a href="index.html">🏠 Store Front</a>
+  </div>
+</div>
+<section>
+  <div style="background:linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);border-radius:20px;padding:40px;margin-bottom:28px;color:#fff;box-shadow:0 20px 60px rgba(15,12,41,0.4)">
+    <h1 style="font-size:32px;margin-bottom:8px">⚙️ Store Settings</h1>
+    <p style="opacity:0.8">Configure your store preferences.</p>
+  </div>
+  <div class="form-card" style="max-width:600px">
+    <h2 style="margin-bottom:16px">Store Configuration</h2>
+    <label>Store Name</label>
+    <input type="text" id="storeName" placeholder="My Store" value="My Store">
+    <label>Contact Email</label>
+    <input type="email" id="storeEmail" placeholder="fahdm19573@gmail.com" value="fahdm19573@gmail.com">
+    <label>Currency</label>
+    <select id="storeCurrency">
+      <option value="USD" selected>$ USD - US Dollar</option>
+      <option value="EUR">€ EUR - Euro</option>
+      <option value="GBP">£ GBP - British Pound</option>
+    </select>
+    <button class="btn-amazon" onclick="alert('✅ Settings saved!')">💾 Save Settings</button>
+    <hr style="margin:24px 0;border:none;border-top:1px solid #e8e8e8">
+    <div style="text-align:center"><a href="admin.html" style="font-size:14px">← Back to Dashboard</a></div>
+  </div>
+</section>
+<footer>
+  <p>© 2026 My Store Host Panel.</p>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

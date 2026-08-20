@@ -100,3 +100,5 @@ npm start
 
 ---
 Built with ❤️ by Fahd
+
+📦 GitHub: [github.com/fahdmohammad11](https://github.com/fahdmohammad11)
