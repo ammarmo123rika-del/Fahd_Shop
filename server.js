@@ -134,7 +134,25 @@ app.put('/api/products/:id/price', function(req, res) {
   for (var i = 0; i < data.products.length; i++) {
     if (data.products[i].id === parseInt(req.params.id)) {
       data.products[i].price = parseFloat(req.body.price);
+      if (req.body.stock !== undefined) data.products[i].stock = parseInt(req.body.stock);
       if (req.body.oldPrice) data.products[i].oldPrice = parseFloat(req.body.oldPrice);
+      saveData(data);
+      return res.json(data.products[i]);
+    }
+  }
+  res.status(404).json({error: 'Not found'});
+});
+app.post('/api/products/:id/price', function(req, res) {
+  var data = loadData();
+  for (var i = 0; i < data.products.length; i++) {
+    if (data.products[i].id === parseInt(req.params.id)) {
+      if (req.body.price !== undefined) data.products[i].price = parseFloat(req.body.price);
+      if (req.body.oldPrice !== undefined) data.products[i].oldPrice = parseFloat(req.body.oldPrice);
+      if (req.body.stock !== undefined) data.products[i].stock = parseInt(req.body.stock);
+      if (req.body.name !== undefined) data.products[i].name = req.body.name;
+      if (req.body.category !== undefined) data.products[i].category = req.body.category;
+      if (req.body.desc !== undefined) data.products[i].desc = req.body.desc;
+      if (req.body.image !== undefined) data.products[i].image = req.body.image;
       saveData(data);
       return res.json(data.products[i]);
     }

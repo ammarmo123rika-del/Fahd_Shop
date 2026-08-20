@@ -1,5 +1,454 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Products - Fahd Shop</title><link rel="stylesheet" href="style.css"></head><body><header><a class="logo" href="index.html">Fahd Shop</a><nav>
-<a href="index.html">Home</a><a href="products.html">Products</a><a href="categories.html">Categories</a>
-<a href="books.html">Books</a><a href="cart.html">Cart</a><a href="account.html">Account</a>
-<a href="orders.html">Orders</a><a href="contact.html">Contact</a><a href="login.html">Login</a><a href="admin.html">Host</a>
-</nav></header><main><h1>Manage Products</h1><div class='card'><button>Add Product</button><p>Product management area.</p></div></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Manage Products - Fahd Shop Admin</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin-bar{background:#232f3e;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+    .admin-bar .logo{color:#ff9900;font-size:22px;font-weight:700;text-decoration:none}
+    .admin-bar nav a{color:#fff;text-decoration:none;margin-left:16px;font-size:14px}
+    .admin-bar nav a:hover{color:#ff9900}
+    .admin-tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:20px 0}
+    .admin-tools input,.admin-tools select{padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
+    .admin-tools button{padding:8px 16px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+    .product-table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+    .product-table th{background:#232f3e;color:#fff;padding:12px 10px;text-align:left;font-size:13px;position:sticky;top:0}
+    .product-table td{padding:10px;border-bottom:1px solid #f0f0f0;vertical-align:middle;font-size:13px}
+    .product-table tr:hover{background:#fef9ee}
+    .product-table img{width:50px;height:50px;object-fit:cover;border-radius:8px}
+    .price-input{width:80px;padding:6px 8px;border:2px solid #ff9900;border-radius:6px;font-size:14px;font-weight:700;text-align:center}
+    .sale-input{width:60px;padding:6px 8px;border:2px solid #e63946;border-radius:6px;font-size:14px;text-align:center}
+    .btn-edit{background:#ff9900;color:#fff;padding:5px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600}
+    .btn-edit:hover{background:#e68a00}
+    .btn-save{background:#10b981;color:#fff;padding:5px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600}
+    .btn-save:hover{background:#059669}
+    .btn-del{background:#ef4444;color:#fff;padding:5px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600}
+    .btn-del:hover{background:#dc2626}
+    .btn-sale{background:#8b5cf6;color:#fff;padding:5px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600}
+    .btn-sale:hover{background:#7c3aed}
+    .btn-off{background:#9ca3af;color:#fff;padding:5px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600}
+    .sale-badge{background:#ff6b35;color:#fff;display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:bold}
+    .toast{position:fixed;bottom:24px;right:24px;background:#10b981;color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.2);z-index:9999;display:none;animation:fadeIn .3s}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:none;justify-content:center;align-items:center}
+    .modal-overlay.active{display:flex}
+    .modal{background:#fff;border-radius:16px;padding:30px;width:90%;max-width:500px;box-shadow:0 8px 40px rgba(0,0,0,.2)}
+    .modal h2{margin:0 0 20px;color:#232f3e}
+    .modal label{display:block;font-size:13px;font-weight:600;color:#555;margin-bottom:4px}
+    .modal input,.modal select,.modal textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:14px;box-sizing:border-box}
+    .modal .btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
+    .stats-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+    .stat-card{flex:1;min-width:140px;background:#fff;border-radius:12px;padding:16px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .stat-card .num{font-size:28px;font-weight:700;color:#ff9900}
+    .stat-card .lbl{font-size:12px;color:#666;margin-top:4px}
+    .primo{color:#059669;font-size:11px;font-weight:bold}
+    @media(max-width:768px){
+      .product-table{font-size:11px}
+      .product-table th,.product-table td{padding:6px 4px}
+      .product-table img{width:36px;height:36px}
+      .btn-edit,.btn-save,.btn-del,.btn-sale,.btn-off{padding:4px 8px;font-size:10px}
+      .admin-tools{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+<div class="top-bar">
+  <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+  <div class="search-bar">
+    <input type="text" placeholder="Search Fahd Shop" id="searchInput" onkeydown="if(event.key==='Enter'){location.href='products.html?search='+this.value}">
+    <button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button>
+  </div>
+  <div class="top-links">
+    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account</b></a>
+    <a href="orders.html"><span class="greeting">Returns</span><br><b>& Orders</b></a>
+    <a href="cart.html" class="cart-link">🛒<span class="cart-count" id="cartCount" style="display:none">0</span></a>
+  </div>
+</div>
+<div class="subnav">
+  <a href="index.html">☰ All</a>
+  <a href="deals.html">Today's Deals <span class="deals-badge">HOT</span></a>
+  <a href="bestsellers.html">Best Sellers</a>
+  <a href="categories.html">Categories</a>
+  <a href="products.html">All Products</a>
+  <a href="ai.html" style="color:#ff9900">🤖 AI Assistant</a>
+  <a href="admin.html" style="color:#ff9900;font-weight:bold">⚙️ Host</a>
+</div>
+
+<div class="container">
+  <div class="breadcrumb"><a href="index.html">Home</a> / <a href="admin.html">Admin</a> / Manage Products</div>
+  <h1 style="margin:16px 0 8px;font-size:26px">📦 Product Management</h1>
+
+  <!-- Stats -->
+  <div class="stats-row" id="statsRow">
+    <div class="stat-card"><div class="num" id="totalProducts">0</div><div class="lbl">Total Products</div></div>
+    <div class="stat-card"><div class="num" id="totalOnSale">0</div><div class="lbl">On Sale</div></div>
+    <div class="stat-card"><div class="num" id="totalValue">$0</div><div class="lbl">Total Value</div></div>
+    <div class="stat-card"><div class="num" id="totalCategories">0</div><div class="lbl">Categories</div></div>
+  </div>
+
+  <!-- Tools -->
+  <div class="admin-tools">
+    <input type="text" id="searchAdmin" placeholder="🔍 Search products..." oninput="filterAdmin()" style="flex:1;min-width:200px">
+    <select id="filterCat" onchange="filterAdmin()" style="min-width:120px">
+      <option value="">All Categories</option>
+    </select>
+    <select id="filterStatus" onchange="filterAdmin()" style="min-width:120px">
+      <option value="">All Status</option>
+      <option value="onsale">On Sale</option>
+      <option value="nosale">No Sale</option>
+      <option value="lowstock">Low Stock</option>
+    </select>
+    <button class="btn-edit" onclick="openAddModal()" style="background:#10b981">➕ Add Product</button>
+  </div>
+
+  <!-- Product Table -->
+  <div style="overflow-x:auto">
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Image</th>
+          <th>Product Name</th>
+          <th>Category</th>
+          <th>Price ($)</th>
+          <th>Old Price</th>
+          <th>Sale %</th>
+          <th>Sale Status</th>
+          <th>Stock</th>
+          <th>Prime</th>
+          <th>Rating</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="productTableBody">
+        <tr><td colspan="12" style="text-align:center;padding:40px;color:#999">Loading products...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Add/Edit Product Modal -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <h2 id="modalTitle">➕ Add New Product</h2>
+    <input type="hidden" id="editId">
+    <label>Product Name</label>
+    <input type="text" id="pName" placeholder="e.g. iPhone 15 Pro">
+    <label>Category</label>
+    <select id="pCategory">
+      <option>Electronics</option><option>Fashion</option><option>Home</option>
+      <option>Gaming</option><option>Books</option><option>Sports</option><option>Other</option>
+    </select>
+    <label>Price ($)</label>
+    <input type="number" id="pPrice" placeholder="99.99" min="0" step="0.01">
+    <label>Old Price ($)</label>
+    <input type="number" id="pOldPrice" placeholder="149.99 (optional)" min="0" step="0.01">
+    <label>Image URL</label>
+    <input type="text" id="pImage" placeholder="https://... or emoji like 📱">
+    <label>Description</label>
+    <textarea id="pDesc" rows="2" placeholder="Product description..."></textarea>
+    <label>Stock</label>
+    <input type="number" id="pStock" placeholder="50" min="0">
+    <label>Rating (1-5)</label>
+    <input type="number" id="pRating" placeholder="4.5" min="1" max="5" step="0.1">
+    <label><input type="checkbox" id="pPrime"> Prime Eligible</label>
+    <div class="btn-row">
+      <button class="btn-del" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveProduct()">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sale Modal -->
+<div class="modal-overlay" id="saleModal">
+  <div class="modal" style="max-width:380px">
+    <h2>🏷️ Set Sale / Offer</h2>
+    <p id="saleProductName" style="color:#666;margin-bottom:16px"></p>
+    <label>Sale Discount (%)</label>
+    <input type="number" id="salePercent" min="0" max="99" value="10" placeholder="10">
+    <p style="font-size:13px;color:#999">Original price will be kept, new price = original × (1 - discount%)</p>
+    <div class="btn-row">
+      <button class="btn-off" onclick="closeSaleModal()">Cancel</button>
+      <button class="btn-sale" onclick="applySale()">Apply Sale</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="footer-back" onclick="window.scrollTo(0,0)">Back to top</div>
+  <div class="footer-grid">
+    <div><h4>Get to Know Us</h4><a href="about.html">About Fahd Shop</a><a href="contact.html">Contact Us</a><a href="ai.html">AI Assistant</a></div>
+    <div><h4>Make Money with Us</h4><a href="admin.html">Sell on Fahd Shop</a><a href="admin.html">Host Dashboard</a></div>
+    <div><h4>Help & Support</h4><a href="returns.html">Returns & Refunds</a><a href="contact.html">Contact Us</a></div>
+    <div><h4>Your Account</h4><a href="account.html">Your Account</a><a href="orders.html">Your Orders</a><a href="wishlist.html">Wishlist</a><a href="cart.html">Cart</a></div>
+  </div>
+  <div class="footer-bottom"><div class="logo">Fahd<span>Shop</span></div><p>© 2026 Fahd Shop. All rights reserved.</p></div>
+</div>
+
+<script src="app.js"></script>
+<script>
+let allAdminProducts = [];
+let currentSaleId = null;
+
+function esc(s) {
+  return String(s||'').replace(/[&<>"']/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});
+}
+
+function imgTag(url, name) {
+  if (url && url.indexOf('http') === 0)
+    return '<img src="'+esc(url)+'" alt="'+esc(name||'')+'" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'"><div style="display:none;font-size:32px;text-align:center">📦</div>';
+  return '<div style="font-size:32px;text-align:center">'+(url||'📦')+'</div>';
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(function(){ t.style.display = 'none'; }, 2500);
+}
+
+async function loadAdminProducts() {
+  try {
+    var res = await fetch('/api/products');
+    allAdminProducts = await res.json();
+  } catch(e) { allAdminProducts = []; }
+  updateStats();
+  populateCategories();
+  renderAdminTable(allAdminProducts);
+}
+
+function updateStats() {
+  var ps = allAdminProducts;
+  document.getElementById('totalProducts').textContent = ps.length;
+  document.getElementById('totalOnSale').textContent = ps.filter(function(p){return p.onSale}).length;
+  var val = ps.reduce(function(s,p){return s+p.price*(p.stock||0)},0);
+  document.getElementById('totalValue').textContent = '$' + val.toLocaleString();
+  var cats = {};
+  ps.forEach(function(p){if(p.category)cats[p.category]=1});
+  document.getElementById('totalCategories').textContent = Object.keys(cats).length;
+}
+
+function populateCategories() {
+  var cats = {};
+  allAdminProducts.forEach(function(p){if(p.category)cats[p.category]=1});
+  var sel = document.getElementById('filterCat');
+  var cur = sel.value;
+  sel.innerHTML = '<option value="">All Categories</option>';
+  Object.keys(cats).sort().forEach(function(c){
+    sel.innerHTML += '<option value="'+c+'"'+(c===cur?' selected':'')+'>'+c+'</option>';
+  });
+}
+
+function filterAdmin() {
+  var q = document.getElementById('searchAdmin').value.toLowerCase();
+  var cat = document.getElementById('filterCat').value;
+  var status = document.getElementById('filterStatus').value;
+  var filtered = allAdminProducts.filter(function(p){
+    if (q && !(p.name||'').toLowerCase().includes(q) && !(p.category||'').toLowerCase().includes(q)) return false;
+    if (cat && p.category !== cat) return false;
+    if (status === 'onsale' && !p.onSale) return false;
+    if (status === 'nosale' && p.onSale) return false;
+    if (status === 'lowstock' && (p.stock||0) > 10) return false;
+    return true;
+  });
+  renderAdminTable(filtered);
+}
+
+function renderAdminTable(products) {
+  var tbody = document.getElementById('productTableBody');
+  if (!products.length) {
+    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;color:#999">No products found.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = products.map(function(p) {
+    var stars = '';
+    var r = Math.round(p.rating || 0);
+    for (var i = 0; i < r; i++) stars += '★';
+    for (var j = r; j < 5; j++) stars += '☆';
+    return '<tr id="row-'+p.id+'">' +
+      '<td><b>'+p.id+'</b></td>' +
+      '<td><div style="width:50px;height:50px;display:flex;align-items:center;justify-content:center;overflow:hidden">'+imgTag(p.image, p.name)+'</div></td>' +
+      '<td style="max-width:200px"><b>'+esc(p.name)+'</b><div style="font-size:11px;color:#999;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(p.desc||'')+'</div></td>' +
+      '<td><span style="background:#e0e7ff;padding:2px 8px;border-radius:6px;font-size:11px">'+esc(p.category||'')+'</span></td>' +
+      '<td><input class="price-input" type="number" id="price-'+p.id+'" value="'+p.price+'" min="0" step="0.01"></td>' +
+      '<td style="color:#999;text-decoration:line-through">$'+(p.oldPrice||p.price)+'</td>' +
+      '<td><input class="sale-input" type="number" id="sale-'+p.id+'" value="'+(p.salePercent||0)+'" min="0" max="99">%</td>' +
+      '<td>'+(p.onSale?'<span class="sale-badge">-'+p.salePercent+'%</span>':'<span style="color:#999">No sale</span>')+'</td>' +
+      '<td><input type="number" id="stock-'+p.id+'" value="'+(p.stock||0)+'" min="0" style="width:60px;padding:4px;border:1px solid #ddd;border-radius:4px;text-align:center"></td>' +
+      '<td>'+(p.prime?'<span class="primo">✓ Prime</span>':'<span style="color:#ccc">—</span>')+'</td>' +
+      '<td style="color:#f59e0b">'+stars+'</td>' +
+      '<td style="white-space:nowrap">' +
+        '<button class="btn-save" onclick="savePrice('+p.id+')" title="Save price">💾</button> ' +
+        '<button class="btn-sale" onclick="openSaleModal('+p.id+',\''+esc(p.name)+'\','+(p.oldPrice||p.price)+')" title="Set sale">🏷️</button> ' +
+        (p.onSale?'<button class="btn-off" onclick="removeSale('+p.id+')" title="Remove sale">❌</button> ':'') +
+        '<button class="btn-del" onclick="deleteProduct('+p.id+',\''+esc(p.name)+'\')" title="Delete">🗑️</button> ' +
+        '<button class="btn-edit" onclick="openEditModal('+p.id+')" title="Edit all">✏️</button>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+async function savePrice(id) {
+  var price = parseFloat(document.getElementById('price-'+id).value);
+  var stock = parseInt(document.getElementById('stock-'+id).value);
+  var salePct = parseInt(document.getElementById('sale-'+id).value) || 0;
+  if (isNaN(price) || price < 0) { showToast('⚠️ Invalid price'); return; }
+  try {
+    await fetch('/api/products/'+id+'/price', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ price: price, stock: stock })
+    });
+    // Also apply sale if percentage > 0
+    if (salePct > 0) {
+      await fetch('/api/products/'+id+'/sale', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ salePercent: salePct })
+      });
+    }
+    showToast('✅ Price saved for product #'+id);
+    await loadAdminProducts();
+    filterAdmin();
+  } catch(e) { showToast('❌ Error saving price'); }
+}
+
+function openSaleModal(id, name, origPrice) {
+  currentSaleId = id;
+  document.getElementById('saleProductName').textContent = name + ' (Original: $' + origPrice + ')';
+  document.getElementById('salePercent').value = 10;
+  document.getElementById('saleModal').classList.add('active');
+}
+
+function closeSaleModal() {
+  document.getElementById('saleModal').classList.remove('active');
+  currentSaleId = null;
+}
+
+async function applySale() {
+  if (!currentSaleId) return;
+  var pct = parseInt(document.getElementById('salePercent').value) || 0;
+  if (pct < 1 || pct > 99) { showToast('⚠️ Discount must be 1-99%'); return; }
+  try {
+    await fetch('/api/products/'+currentSaleId+'/sale', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ salePercent: pct })
+    });
+    closeSaleModal();
+    showToast('🏷️ Sale of '+pct+'% applied!');
+    await loadAdminProducts();
+    filterAdmin();
+  } catch(e) { showToast('❌ Error applying sale'); }
+}
+
+async function removeSale(id) {
+  try {
+    await fetch('/api/products/'+id+'/sale', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ salePercent: 0 })
+    });
+    showToast('❌ Sale removed');
+    await loadAdminProducts();
+    filterAdmin();
+  } catch(e) { showToast('❌ Error'); }
+}
+
+async function deleteProduct(id, name) {
+  if (!confirm('Delete "' + name + '"?\nThis cannot be undone.')) return;
+  try {
+    await fetch('/api/products/'+id, { method: 'DELETE' });
+    showToast('🗑️ Deleted: '+name);
+    await loadAdminProducts();
+    filterAdmin();
+  } catch(e) { showToast('❌ Error deleting'); }
+}
+
+function openAddModal() {
+  document.getElementById('modalTitle').textContent = '➕ Add New Product';
+  document.getElementById('editId').value = '';
+  document.getElementById('pName').value = '';
+  document.getElementById('pCategory').value = 'Electronics';
+  document.getElementById('pPrice').value = '';
+  document.getElementById('pOldPrice').value = '';
+  document.getElementById('pImage').value = '';
+  document.getElementById('pDesc').value = '';
+  document.getElementById('pStock').value = '50';
+  document.getElementById('pRating').value = '4.5';
+  document.getElementById('pPrime').checked = true;
+  document.getElementById('productModal').classList.add('active');
+}
+
+function openEditModal(id) {
+  var p = allAdminProducts.find(function(x){return x.id===id});
+  if (!p) return;
+  document.getElementById('modalTitle').textContent = '✏️ Edit Product #' + id;
+  document.getElementById('editId').value = id;
+  document.getElementById('pName').value = p.name || '';
+  document.getElementById('pCategory').value = p.category || 'Electronics';
+  document.getElementById('pPrice').value = p.price || '';
+  document.getElementById('pOldPrice').value = p.oldPrice || '';
+  document.getElementById('pImage').value = p.image || '';
+  document.getElementById('pDesc').value = p.desc || '';
+  document.getElementById('pStock').value = p.stock || 50;
+  document.getElementById('pRating').value = p.rating || 4.5;
+  document.getElementById('pPrime').checked = !!p.prime;
+  document.getElementById('productModal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('productModal').classList.remove('active');
+}
+
+async function saveProduct() {
+  var id = document.getElementById('editId').value;
+  var data = {
+    name: document.getElementById('pName').value.trim(),
+    category: document.getElementById('pCategory').value,
+    price: parseFloat(document.getElementById('pPrice').value) || 0,
+    oldPrice: parseFloat(document.getElementById('pOldPrice').value) || parseFloat(document.getElementById('pPrice').value) || 0,
+    image: document.getElementById('pImage').value.trim() || '📦',
+    desc: document.getElementById('pDesc').value.trim(),
+    stock: parseInt(document.getElementById('pStock').value) || 50,
+    rating: parseFloat(document.getElementById('pRating').value) || 4.5,
+    prime: document.getElementById('pPrime').checked,
+    reviews: 0
+  };
+  if (!data.name) { showToast('⚠️ Enter product name'); return; }
+  if (data.price <= 0) { showToast('⚠️ Enter valid price'); return; }
+  try {
+    if (id) {
+      await fetch('/api/products/'+id+'/price', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ price: data.price, oldPrice: data.oldPrice })
+      });
+      showToast('✅ Product #'+id+' updated');
+    } else {
+      await fetch('/api/products', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(data)
+      });
+      showToast('✅ Product added!');
+    }
+    closeModal();
+    await loadAdminProducts();
+    filterAdmin();
+  } catch(e) { showToast('❌ Error saving product'); }
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', function() {
+  loadAdminProducts();
+  if (typeof updateCartCount === 'function') updateCartCount();
+});
+</script>
+</body>
+</html>
