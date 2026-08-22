@@ -1,5 +1,146 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Orders - Fahd Shop</title><link rel="stylesheet" href="style.css"></head><body><header><a class="logo" href="index.html">Fahd Shop</a><nav>
-<a href="index.html">Home</a><a href="products.html">Products</a><a href="categories.html">Categories</a>
-<a href="books.html">Books</a><a href="cart.html">Cart</a><a href="account.html">Account</a>
-<a href="orders.html">Orders</a><a href="contact.html">Contact</a><a href="login.html">Login</a><a href="admin.html">Host</a>
-</nav></header><main><h1>Manage Orders</h1><div id='orders' class='card'></div></main><script src='app.js'></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manage Orders - Fahd Shop</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.order-card { background: #fff; border: 1px solid #d5d9d9; border-radius: 4px; padding: 20px; margin-bottom: 12px; }
+.order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.order-id { font-weight: 700; font-size: 16px; }
+.order-date { color: #565959; font-size: 13px; }
+.order-items { border-top: 1px solid #eee; padding-top: 10px; margin-top: 10px; }
+.order-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.order-item img { width: 50px; height: 50px; object-fit: contain; border-radius: 4px; background: #f7f7f7; }
+.order-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #eee; }
+.order-total { font-size: 18px; font-weight: 700; color: #b12704; }
+.status-select { padding: 6px 12px; border: 1px solid #d5d9d9; border-radius: 4px; font-size: 13px; cursor: pointer; }
+.status-badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+.status-pending { background: #fef3cd; color: #856404; }
+.status-processing { background: #cce5ff; color: #004085; }
+.status-shipped { background: #d1ecf1; color: #0c5460; }
+.status-delivered { background: #d4edda; color: #155724; }
+.status-cancelled { background: #f8d7da; color: #721c24; }
+.filter-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+.filter-bar select, .filter-bar input { padding: 8px 12px; border: 1px solid #d5d9d9; border-radius: 4px; font-size: 14px; }
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.stat-box { background: #fff; border: 1px solid #d5d9d9; border-radius: 4px; padding: 16px; text-align: center; }
+.stat-box .num { font-size: 24px; font-weight: 700; color: #b12704; }
+.stat-box .label { font-size: 12px; color: #565959; margin-top: 4px; }
+@media (max-width: 600px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+  <div class="search-bar"><input type="text" placeholder="Search Fahd Shop" id="searchInput" onkeydown="if(event.key==='Enter'){location.href='products.html?search='+this.value}"><button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button></div>
+  <div class="top-links">
+    <a href="admin.html" style="color:#ff9900"><b>⚙️ Admin</b></a>
+    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account</b></a>
+    <a href="cart.html" class="cart-link"><span class="cart-icon">🛒</span><span class="cart-count" id="cartCount" style="display:none">0</span>Cart</a>
+  </div>
+</div>
+<div class="accent-line"></div>
+<div class="subnav">
+  <a href="admin.html">⚙️ Dashboard</a>
+  <a href="admin-products.html">📦 Products</a>
+  <a href="admin-orders.html" class="active">📋 Orders</a>
+  <a href="admin-customers.html">👥 Customers</a>
+  <a href="chat.html">💬 Chat</a>
+  <a href="add-product.html">➕ Add Product</a>
+  <a href="admin-settings.html">🔧 Settings</a>
+  <a href="index.html" style="color:#ff9900">🏪 View Store</a>
+</div>
+
+<div class="container">
+  <div class="breadcrumb"><a href="index.html">Home</a> / <a href="admin.html">Admin</a> / Orders</div>
+  <h1 style="margin:16px 0;font-size:24px">📋 Manage Orders</h1>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="num" id="totalOrders">0</div><div class="label">Total Orders</div></div>
+    <div class="stat-box"><div class="num" id="pendingCount">0</div><div class="label">Pending</div></div>
+    <div class="stat-box"><div class="num" id="shippedCount">0</div><div class="label">Shipped</div></div>
+    <div class="stat-box"><div class="num" id="totalRevenue">$0</div><div class="label">Total Revenue</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <input type="text" placeholder="Search orders..." id="searchOrders" oninput="filterOrders()">
+    <select id="statusFilter" onchange="filterOrders()">
+      <option value="">All Status</option>
+      <option value="Pending">Pending</option>
+      <option value="Processing">Processing</option>
+      <option value="Shipped">Shipped</option>
+      <option value="Delivered">Delivered</option>
+      <option value="Cancelled">Cancelled</option>
+    </select>
+  </div>
+
+  <div id="ordersList"></div>
+</div>
+
+<div class="footer">
+  <div class="footer-back" onclick="window.scrollTo(0,0)">Back to top</div>
+  <div class="footer-divider"></div>
+  <div class="footer-bottom"><div class="logo">Fahd<span>Shop</span></div><p>© 2026 Fahd Shop Admin Panel</p></div>
+</div>
+
+<script src="app.js"></script>
+<script>
+updateCartCount();
+var allOrders = [];
+
+fetch('/api/orders').then(function(r){return r.json()}).then(function(orders) {
+  allOrders = orders;
+  // Stats
+  document.getElementById('totalOrders').textContent = orders.length;
+  document.getElementById('pendingCount').textContent = orders.filter(function(o){return o.status==='Pending'}).length;
+  document.getElementById('shippedCount').textContent = orders.filter(function(o){return o.status==='Shipped'}).length;
+  var rev = orders.reduce(function(s,o){return s+(o.total||0)},0);
+  document.getElementById('totalRevenue').textContent = '$' + rev.toFixed(0);
+  renderOrders(orders);
+}).catch(function(){
+  document.getElementById('ordersList').innerHTML = '<div class="card" style="text-align:center;padding:40px;color:#999">No orders found</div>';
+});
+
+function renderOrders(orders) {
+  var el = document.getElementById('ordersList');
+  if (!orders.length) { el.innerHTML = '<div class="card" style="text-align:center;padding:40px;color:#999">No orders match your filter</div>'; return; }
+  el.innerHTML = orders.map(function(o) {
+    var statusClass = 'status-' + (o.status||'pending').toLowerCase();
+    var items = (o.items||[]).map(function(item) {
+      var imgSrc = item.image && item.image.indexOf('http')===0 ? item.image : '';
+      return '<div class="order-item">' + (imgSrc ? '<img src="'+imgSrc+'" alt="'+item.name+'">' : '<div style="width:50px;height:50px;background:#f7f7f7;border-radius:4px;display:flex;align-items:center;justify-content:center">📦</div>') + '<div style="flex:1"><b>' + (item.name||'Product') + '</b><div style="color:#565959;font-size:13px">$' + (item.price||0) + ' × ' + (item.qty||1) + '</div></div></div>';
+    }).join('');
+    return '<div class="order-card"><div class="order-header"><div><span class="order-id">Order #' + o.id + '</span> <span class="order-date">' + (o.date||'').slice(0,10) + '</span></div><span class="status-badge ' + statusClass + '">' + (o.status||'Pending') + '</span></div><div class="order-items"><div style="font-size:12px;color:#565959;margin-bottom:6px">Customer: ' + (o.user||'Guest') + '</div>' + items + '</div><div class="order-footer"><div class="order-total">$' + (o.total||0).toFixed(2) + '</div><select class="status-select" onchange="updateStatus(' + o.id + ',this.value)"><option value="Pending"' + (o.status==='Pending'?' selected':'') + '>Pending</option><option value="Processing"' + (o.status==='Processing'?' selected':'') + '>Processing</option><option value="Shipped"' + (o.status==='Shipped'?' selected':'') + '>Shipped</option><option value="Delivered"' + (o.status==='Delivered'?' selected':'') + '>Delivered</option><option value="Cancelled"' + (o.status==='Cancelled'?' selected':'') + '>Cancelled</option></select></div></div>';
+  }).join('');
+}
+
+function filterOrders() {
+  var q = document.getElementById('searchOrders').value.toLowerCase();
+  var status = document.getElementById('statusFilter').value;
+  var filtered = allOrders.filter(function(o) {
+    var matchQ = !q || (o.user||'').toLowerCase().includes(q) || String(o.id).includes(q);
+    var matchStatus = !status || o.status === status;
+    return matchQ && matchStatus;
+  });
+  renderOrders(filtered);
+}
+
+function updateStatus(id, status) {
+  fetch('/api/orders/' + id + '/status', {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({status: status})
+  }).then(function() {
+    var o = allOrders.find(function(x){return x.id===id});
+    if (o) o.status = status;
+    filterOrders();
+    // Update stats
+    document.getElementById('pendingCount').textContent = allOrders.filter(function(o){return o.status==='Pending'}).length;
+    document.getElementById('shippedCount').textContent = allOrders.filter(function(o){return o.status==='Shipped'}).length;
+  });
+}
+</script>
+</body>
+</html>
