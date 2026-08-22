@@ -1,5 +1,104 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Customers - Fahd Shop</title><link rel="stylesheet" href="style.css"></head><body><header><a class="logo" href="index.html">Fahd Shop</a><nav>
-<a href="index.html">Home</a><a href="products.html">Products</a><a href="categories.html">Categories</a>
-<a href="books.html">Books</a><a href="cart.html">Cart</a><a href="account.html">Account</a>
-<a href="orders.html">Orders</a><a href="contact.html">Contact</a><a href="login.html">Login</a><a href="admin.html">Host</a>
-</nav></header><main><h1>Customers</h1><div class='card'><p>Customer management area.</p></div></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manage Customers - Fahd Shop</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.stat-box { background: #fff; border: 1px solid #d5d9d9; border-radius: 4px; padding: 16px; text-align: center; }
+.stat-box .num { font-size: 24px; font-weight: 700; color: #b12704; }
+.stat-box .label { font-size: 12px; color: #565959; margin-top: 4px; }
+.customer-card { background: #fff; border: 1px solid #d5d9d9; border-radius: 4px; padding: 16px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+.customer-info { display: flex; align-items: center; gap: 14px; }
+.customer-avatar { width: 44px; height: 44px; border-radius: 50%; background: #232f3e; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; }
+.customer-email { font-weight: 700; font-size: 15px; }
+.customer-meta { color: #565959; font-size: 13px; }
+.customer-stats { text-align: right; }
+.customer-stats .orders { font-size: 18px; font-weight: 700; color: #b12704; }
+.customer-stats .spent { color: #565959; font-size: 13px; }
+.filter-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.filter-bar input { padding: 8px 12px; border: 1px solid #d5d9d9; border-radius: 4px; font-size: 14px; width: 250px; }
+@media (max-width: 600px) { .stats-row { grid-template-columns: 1fr; } .customer-card { flex-direction: column; align-items: flex-start; gap: 10px; } }
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+  <div class="search-bar"><input type="text" placeholder="Search Fahd Shop" id="searchInput" onkeydown="if(event.key==='Enter'){location.href='products.html?search='+this.value}"><button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button></div>
+  <div class="top-links">
+    <a href="admin.html" style="color:#ff9900"><b>⚙️ Admin</b></a>
+    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account</b></a>
+    <a href="cart.html" class="cart-link"><span class="cart-icon">🛒</span><span class="cart-count" id="cartCount" style="display:none">0</span>Cart</a>
+  </div>
+</div>
+<div class="accent-line"></div>
+<div class="subnav">
+  <a href="admin.html">⚙️ Dashboard</a>
+  <a href="admin-products.html">📦 Products</a>
+  <a href="admin-orders.html">📋 Orders</a>
+  <a href="admin-customers.html" class="active">👥 Customers</a>
+  <a href="chat.html">💬 Chat</a>
+  <a href="add-product.html">➕ Add Product</a>
+  <a href="admin-settings.html">🔧 Settings</a>
+  <a href="index.html" style="color:#ff9900">🏪 View Store</a>
+</div>
+
+<div class="container">
+  <div class="breadcrumb"><a href="index.html">Home</a> / <a href="admin.html">Admin</a> / Customers</div>
+  <h1 style="margin:16px 0;font-size:24px">👥 Manage Customers</h1>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="num" id="totalCustomers">0</div><div class="label">Total Customers</div></div>
+    <div class="stat-box"><div class="num" id="totalRevenue">$0</div><div class="label">Total Revenue</div></div>
+    <div class="stat-box"><div class="num" id="avgOrder">$0</div><div class="label">Avg Order Value</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <input type="text" placeholder="Search by email..." id="searchInput2" oninput="filterCustomers()">
+  </div>
+
+  <div id="customersList"></div>
+</div>
+
+<div class="footer">
+  <div class="footer-back" onclick="window.scrollTo(0,0)">Back to top</div>
+  <div class="footer-divider"></div>
+  <div class="footer-bottom"><div class="logo">Fahd<span>Shop</span></div><p>© 2026 Fahd Shop Admin Panel</p></div>
+</div>
+
+<script src="app.js"></script>
+<script>
+updateCartCount();
+var allCustomers = [];
+
+fetch('/api/customers').then(function(r){return r.json()}).then(function(customers) {
+  allCustomers = customers;
+  var totalRev = customers.reduce(function(s,c){return s+c.totalSpent},0);
+  var totalOrders = customers.reduce(function(s,c){return s+c.orderCount},0);
+  document.getElementById('totalCustomers').textContent = customers.length;
+  document.getElementById('totalRevenue').textContent = '$' + totalRev.toFixed(0);
+  document.getElementById('avgOrder').textContent = '$' + (totalOrders ? (totalRev/totalOrders).toFixed(0) : 0);
+  renderCustomers(customers);
+}).catch(function(){
+  document.getElementById('customersList').innerHTML = '<div class="card" style="text-align:center;padding:40px;color:#999">No customers yet</div>';
+});
+
+function renderCustomers(customers) {
+  var el = document.getElementById('customersList');
+  if (!customers.length) { el.innerHTML = '<div class="card" style="text-align:center;padding:40px;color:#999">No customers found</div>'; return; }
+  el.innerHTML = customers.map(function(c) {
+    var initials = (c.email||'?').slice(0,2).toUpperCase();
+    return '<div class="customer-card"><div class="customer-info"><div class="customer-avatar">' + initials + '</div><div><div class="customer-email">' + (c.email||'Unknown') + '</div><div class="customer-meta">' + c.orderCount + ' order' + (c.orderCount!==1?'s':'') + '</div></div></div><div class="customer-stats"><div class="orders">$' + c.totalSpent.toFixed(0) + '</div><div class="spent">total spent</div></div></div>';
+  }).join('');
+}
+
+function filterCustomers() {
+  var q = document.getElementById('searchInput2').value.toLowerCase();
+  var filtered = allCustomers.filter(function(c){ return !q || (c.email||'').toLowerCase().includes(q); });
+  renderCustomers(filtered);
+}
+</script>
+</body>
+</html>

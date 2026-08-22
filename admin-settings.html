@@ -1,5 +1,132 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Settings - Fahd Shop</title><link rel="stylesheet" href="style.css"></head><body><header><a class="logo" href="index.html">Fahd Shop</a><nav>
-<a href="index.html">Home</a><a href="products.html">Products</a><a href="categories.html">Categories</a>
-<a href="books.html">Books</a><a href="cart.html">Cart</a><a href="account.html">Account</a>
-<a href="orders.html">Orders</a><a href="contact.html">Contact</a><a href="login.html">Login</a><a href="admin.html">Host</a>
-</nav></header><main><h1>Store Settings</h1><div class='card'><input placeholder='Store name'><button>Save</button></div></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Store Settings - Fahd Shop</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.setting-card { background: #fff; border: 1px solid #d5d9d9; border-radius: 4px; padding: 24px; margin-bottom: 16px; }
+.setting-card h3 { font-size: 18px; margin-bottom: 12px; }
+.setting-card label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.setting-card input, .setting-card select { width: 100%; padding: 10px 12px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 14px; margin-bottom: 14px; }
+.setting-card input:focus { border-color: #e77600; box-shadow: 0 0 3px 2px rgba(228,121,17,.5); }
+.save-btn { background: linear-gradient(to bottom, #f7dfa5, #f0c14b); border: 1px solid #a88734; border-radius: 4px; padding: 10px 24px; font-weight: 700; cursor: pointer; font-size: 14px; }
+.save-btn:hover { background: linear-gradient(to bottom, #f5d78e, #eeb933); }
+.saved { color: #067d62; font-weight: 700; display: none; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a class="logo" href="index.html">Fahd<span>Shop</span></a>
+  <div class="search-bar"><input type="text" placeholder="Search Fahd Shop" id="searchInput" onkeydown="if(event.key==='Enter'){location.href='products.html?search='+this.value}"><button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button></div>
+  <div class="top-links">
+    <a href="admin.html" style="color:#ff9900"><b>⚙️ Admin</b></a>
+    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account</b></a>
+    <a href="cart.html" class="cart-link"><span class="cart-icon">🛒</span><span class="cart-count" id="cartCount" style="display:none">0</span>Cart</a>
+  </div>
+</div>
+<div class="accent-line"></div>
+<div class="subnav">
+  <a href="admin.html">⚙️ Dashboard</a>
+  <a href="admin-products.html">📦 Products</a>
+  <a href="admin-orders.html">📋 Orders</a>
+  <a href="admin-customers.html">👥 Customers</a>
+  <a href="chat.html">💬 Chat</a>
+  <a href="add-product.html">➕ Add Product</a>
+  <a href="admin-settings.html" class="active">🔧 Settings</a>
+  <a href="index.html" style="color:#ff9900">🏪 View Store</a>
+</div>
+
+<div class="container">
+  <div class="breadcrumb"><a href="index.html">Home</a> / <a href="admin.html">Admin</a> / Settings</div>
+  <h1 style="margin:16px 0;font-size:24px">🔧 Store Settings</h1>
+
+  <div class="setting-card">
+    <h3>Store Information</h3>
+    <label>Store Name</label>
+    <input type="text" id="storeName" value="Fahd Shop" placeholder="Store name">
+    <label>Store Description</label>
+    <input type="text" id="storeDesc" value="Everything you need, in one place." placeholder="Short description">
+    <label>Contact Email</label>
+    <input type="email" id="storeEmail" value="fahdm19573@gmail.com" placeholder="contact@store.com">
+    <button class="save-btn" onclick="saveSettings('store')">Save Store Info</button>
+    <div class="saved" id="storeSaved">✓ Saved!</div>
+  </div>
+
+  <div class="setting-card">
+    <h3>Shipping</h3>
+    <label>Free Shipping Threshold ($)</label>
+    <input type="number" id="freeShipThreshold" value="25" placeholder="25">
+    <label>Default Shipping Cost ($)</label>
+    <input type="number" id="shipCost" value="5.99" placeholder="5.99">
+    <button class="save-btn" onclick="saveSettings('shipping')">Save Shipping</button>
+    <div class="saved" id="shippingSaved">✓ Saved!</div>
+  </div>
+
+  <div class="setting-card">
+    <h3>Tax</h3>
+    <label>Tax Rate (%)</label>
+    <input type="number" id="taxRate" value="8" placeholder="8">
+    <button class="save-btn" onclick="saveSettings('tax')">Save Tax</button>
+    <div class="saved" id="taxSaved">✓ Saved!</div>
+  </div>
+
+  <div class="setting-card">
+    <h3>AI Assistant (Ollama)</h3>
+    <label>Ollama URL</label>
+    <input type="text" id="ollamaUrl" value="http://127.0.0.1:11434" placeholder="http://127.0.0.1:11434">
+    <label>Default Model</label>
+    <input type="text" id="defaultModel" value="llama3.2" placeholder="llama3.2">
+    <button class="save-btn" onclick="saveSettings('ai')">Save AI Config</button>
+    <div class="saved" id="aiSaved">✓ Saved!</div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-back" onclick="window.scrollTo(0,0)">Back to top</div>
+  <div class="footer-divider"></div>
+  <div class="footer-bottom"><div class="logo">Fahd<span>Shop</span></div><p>© 2026 Fahd Shop Admin Panel</p></div>
+</div>
+
+<script src="app.js"></script>
+<script>
+updateCartCount();
+
+// Load saved settings
+function loadSettings() {
+  var s = JSON.parse(localStorage.getItem('fahd_settings') || '{}');
+  if (s.storeName) document.getElementById('storeName').value = s.storeName;
+  if (s.storeDesc) document.getElementById('storeDesc').value = s.storeDesc;
+  if (s.storeEmail) document.getElementById('storeEmail').value = s.storeEmail;
+  if (s.freeShipThreshold) document.getElementById('freeShipThreshold').value = s.freeShipThreshold;
+  if (s.shipCost) document.getElementById('shipCost').value = s.shipCost;
+  if (s.taxRate) document.getElementById('taxRate').value = s.taxRate;
+  if (s.ollamaUrl) document.getElementById('ollamaUrl').value = s.ollamaUrl;
+  if (s.defaultModel) document.getElementById('defaultModel').value = s.defaultModel;
+}
+
+function saveSettings(section) {
+  var s = JSON.parse(localStorage.getItem('fahd_settings') || '{}');
+  if (section === 'store') {
+    s.storeName = document.getElementById('storeName').value;
+    s.storeDesc = document.getElementById('storeDesc').value;
+    s.storeEmail = document.getElementById('storeEmail').value;
+  } else if (section === 'shipping') {
+    s.freeShipThreshold = document.getElementById('freeShipThreshold').value;
+    s.shipCost = document.getElementById('shipCost').value;
+  } else if (section === 'tax') {
+    s.taxRate = document.getElementById('taxRate').value;
+  } else if (section === 'ai') {
+    s.ollamaUrl = document.getElementById('ollamaUrl').value;
+    s.defaultModel = document.getElementById('defaultModel').value;
+  }
+  localStorage.setItem('fahd_settings', JSON.stringify(s));
+  var el = document.getElementById(section + 'Saved');
+  if (el) { el.style.display = 'block'; setTimeout(function(){ el.style.display = 'none'; }, 2000); }
+}
+
+loadSettings();
+</script>
+</body>
+</html>

@@ -5,71 +5,74 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>My Orders - Fahd Shop</title>
 <link rel="stylesheet" href="style.css">
-
+<style>
+.order-card { background: #fff; border: 1px solid #d5d9d9; border-radius: 4px; padding: 20px; margin-bottom: 12px; }
+.order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+.order-id { font-weight: 700; font-size: 16px; }
+.order-date { color: #565959; font-size: 13px; }
+.order-items { border-top: 1px solid #eee; padding-top: 10px; }
+.order-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.order-item img { width: 50px; height: 50px; object-fit: contain; border-radius: 4px; background: #f7f7f7; }
+.order-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #eee; }
+.order-total { font-size: 18px; font-weight: 700; color: #b12704; }
+.status-badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+.status-pending { background: #fef3cd; color: #856404; }
+.status-processing { background: #cce5ff; color: #004085; }
+.status-shipped { background: #d1ecf1; color: #0c5460; }
+.status-delivered { background: #d4edda; color: #155724; }
+</style>
 </head>
 <body>
 <div class="top-bar">
   <a class="logo" href="index.html">Fahd<span>Shop</span></a>
-  <div class="search-bar">
-    <input type="text" placeholder="Search Fahd Shop" id="searchInput" onkeydown="if(event.key==='Enter'){location.href='products.html?search='+this.value}">
-    <button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button>
-  </div>
+  <div class="search-bar"><input type="text" placeholder="Search Fahd Shop" id="searchInput" onkeydown="if(event.key==='Enter'){location.href='products.html?search='+this.value}"><button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button></div>
   <div class="top-links">
     <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account</b></a>
     <a href="orders.html"><span class="greeting">Returns</span><br><b>& Orders</b></a>
-    <a href="cart.html" class="cart-link">🛒<span class="cart-count" id="cartCount" style="display:none">0</span></a>
+    <a href="cart.html" class="cart-link"><span class="cart-icon">🛒</span><span class="cart-count" id="cartCount" style="display:none">0</span>Cart</a>
   </div>
 </div>
+<div class="accent-line"></div>
 <div class="subnav">
-  <a href="index.html" class="active">☰ All</a>
+  <a href="index.html">☰ All</a>
   <a href="deals.html">Today's Deals <span class="deals-badge">HOT</span></a>
   <a href="bestsellers.html">Best Sellers</a>
   <a href="categories.html">Categories</a>
-  <a href="books.html">Books</a>
-  <a href="giftcards.html">Gift Cards</a>
   <a href="products.html">All Products</a>
-  <a href="returns.html">Help</a>
   <a href="ai.html" style="color:#ff9900">🤖 AI Assistant</a>
 </div>
+
 <div class="container">
-
-<div class="breadcrumb"><a href="index.html">Home</a> / My Orders</div>
-<h1 style="margin:20px 0 10px;font-size:28px">📦 My Orders</h1>
-<div id="orders"></div>
-<script>document.addEventListener('DOMContentLoaded',showOrders);</script>
-
+  <div class="breadcrumb"><a href="index.html">Home</a> / My Orders</div>
+  <h1 style="margin:16px 0;font-size:24px">📦 My Orders</h1>
+  <div id="orders"></div>
 </div>
+
 <div class="footer">
   <div class="footer-back" onclick="window.scrollTo(0,0)">Back to top</div>
-  <div class="footer-grid">
-    <div><h4>Get to Know Us</h4>
-      <a href="about.html">About Fahd Shop</a>
-      <a href="contact.html">Contact Us</a>
-      <a href="ai.html">AI Assistant</a>
-    </div>
-    <div><h4>Make Money with Us</h4>
-      <a href="admin.html">Sell on Fahd Shop</a>
-      <a href="admin.html">Host Dashboard</a>
-      <a href="products.html">Advertise Products</a>
-    </div>
-    <div><h4>Help & Support</h4>
-      <a href="returns.html">Returns & Refunds</a>
-      <a href="contact.html">Contact Us</a>
-      <a href="returns.html">FAQ</a>
-    </div>
-    <div><h4>Your Account</h4>
-      <a href="account.html">Your Account</a>
-      <a href="orders.html">Your Orders</a>
-      <a href="wishlist.html">Your Wishlist</a>
-      <a href="cart.html">Your Cart</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="logo">Fahd<span>Shop</span></div>
-    <p>© 2026 Fahd Shop. All rights reserved. | <a href="about.html" style="color:#999">Privacy</a> | <a href="about.html" style="color:#999">Terms</a></p>
-  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-bottom"><div class="logo">Fahd<span>Shop</span></div><p>© 2026 Fahd Shop. All rights reserved.</p></div>
 </div>
+
 <script src="app.js"></script>
-<script>updateCartCount()</script>
+<script>
+updateCartCount();
+var user = localStorage.getItem('fahd_user') || 'customer@test.com';
+fetch('/api/orders').then(function(r){return r.json()}).then(function(orders) {
+  var myOrders = orders.filter(function(o){return o.user === user});
+  var el = document.getElementById('orders');
+  if (!myOrders.length) { el.innerHTML = '<div class="card" style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">📦</div><h2>No orders yet</h2><p style="color:#565959;margin-top:8px">Start shopping to see your orders here</p><a href="products.html" class="btn" style="margin-top:16px;display:inline-block">Browse Products</a></div>'; return; }
+  el.innerHTML = myOrders.map(function(o) {
+    var statusClass = 'status-' + (o.status||'pending').toLowerCase();
+    var items = (o.items||[]).map(function(item) {
+      var img = item.image && item.image.indexOf('http')===0 ? '<img src="'+item.image+'" alt="'+item.name+'">' : '<div style="width:50px;height:50px;background:#f7f7f7;border-radius:4px;display:flex;align-items:center;justify-content:center">📦</div>';
+      return '<div class="order-item">' + img + '<div style="flex:1"><b>' + (item.name||'Product') + '</b><div style="color:#565959;font-size:13px">$' + (item.price||0) + ' × ' + (item.qty||1) + '</div></div></div>';
+    }).join('');
+    return '<div class="order-card"><div class="order-header"><div><span class="order-id">Order #' + o.id + '</span> <span class="order-date">' + (o.date||'').slice(0,10) + '</span></div><span class="status-badge ' + statusClass + '">' + (o.status||'Pending') + '</span></div><div class="order-items">' + items + '</div><div class="order-footer"><div class="order-total">$' + (o.total||0).toFixed(2) + '</div></div></div>';
+  }).join('');
+}).catch(function(){
+  document.getElementById('orders').innerHTML = '<div class="card" style="text-align:center;padding:40px;color:#999">Could not load orders</div>';
+});
+</script>
 </body>
 </html>

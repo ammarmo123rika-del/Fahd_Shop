@@ -104,6 +104,12 @@
   <div class="feature-box"><div class="icon">🤖</div><h3>AI Assistant</h3><p>Get help from our AI chatbot</p></div>
 </div>
 
+<!-- Countdown Timer -->
+<div class="countdown-bar">
+  <h3>⏱ Flash Sale ends in:</h3>
+  <div class="countdown-timer" id="countdown"></div>
+</div>
+
 <!-- Deals Banner -->
 <div class="deal-banner">
   <div><h2>🔥 Today's Deals</h2><p class="timer">Up to 50% off on selected items</p></div>
@@ -130,6 +136,14 @@
   <a href="bestsellers.html">See all →</a>
 </div>
 <div class="product-grid" id="bestsellers"></div>
+
+<!-- Recently Viewed -->
+<div id="rvSection">
+<div class="section-header">
+  <h2>Recently Viewed</h2>
+</div>
+<div class="product-grid" id="recentlyViewed"></div>
+</div>
 
 <!-- Why Shop With Us -->
 <div class="section-header"><h2>Why Shop with Us?</h2></div>
@@ -209,7 +223,13 @@ resetAutoplay();
 // Load products
 document.addEventListener('DOMContentLoaded', function() {
   renderProducts('featured', 8);
+  renderRecentlyViewed('recentlyViewed', 6);
   updateCartCount();
+  
+  // Start countdown (24h from now)
+  var endTime = new Date();
+  endTime.setHours(endTime.getHours() + 24, 0, 0, 0);
+  startCountdown('countdown', endTime.getTime());
   fetch('/api/products').then(function(r){return r.json()}).then(function(products) {
     // Best sellers
     var sorted = products.slice().sort(function(a,b){return (b.reviews||0)-(a.reviews||0)});
