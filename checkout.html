@@ -5,7 +5,36 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Checkout - Fahd Shop</title>
 <link rel="stylesheet" href="style.css">
-
+<style>
+.checkout-layout { display: grid; grid-template-columns: 1fr 380px; gap: 24px; margin: 20px 0; }
+.checkout-section { background: #fff; border: 1px solid #d5d9d9; border-radius: 8px; padding: 24px; margin-bottom: 16px; }
+.checkout-section h2 { font-size: 18px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+.step-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #000; font-size: 14px; font-weight: 700; margin-right: 8px; }
+.payment-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.payment-opt { padding: 16px; border: 2px solid #d5d9d9; border-radius: 8px; cursor: pointer; text-align: center; transition: all .15s; }
+.payment-opt:hover { border-color: #999; }
+.payment-opt.selected { border-color: var(--primary); background: #fff8f0; }
+.payment-opt input { display: none; }
+.payment-opt .icon { font-size: 28px; margin-bottom: 4px; }
+.payment-opt .label { font-size: 13px; font-weight: 700; }
+.order-summary { position: sticky; top: 80px; }
+.order-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+.order-item img { width: 50px; height: 50px; object-fit: contain; border-radius: 4px; background: #f7f7f7; }
+.order-item-name { font-size: 13px; font-weight: 600; flex: 1; }
+.order-item-qty { font-size: 12px; color: #565959; }
+.order-item-price { font-size: 14px; font-weight: 700; color: #b12704; white-space: nowrap; }
+.summary-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; }
+.summary-row.shipping { color: #067d62; }
+.summary-total { display: flex; justify-content: space-between; padding: 12px 0; font-size: 18px; font-weight: 800; border-top: 2px solid var(--primary); margin-top: 8px; }
+.place-order-btn { width: 100%; padding: 14px; background: linear-gradient(to bottom, #f7dfa5, #f0c14b); border: 1px solid #a88734; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; color: #000; margin-top: 12px; }
+.place-order-btn:hover { background: linear-gradient(to bottom, #f5d78e, #eeb933); }
+.secure-badge { text-align: center; margin-top: 12px; font-size: 12px; color: #565959; }
+.secure-badge span { color: #067d62; font-weight: 700; }
+.back-to-cart { display: inline-flex; align-items: center; gap: 4px; color: #007185; font-size: 14px; margin-bottom: 16px; }
+.back-to-cart:hover { color: #c7511f; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 900px) { .checkout-layout { grid-template-columns: 1fr; } .payment-options { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
 <div class="top-bar">
@@ -15,78 +44,317 @@
     <button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button>
   </div>
   <div class="top-links">
-    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account</b></a>
+    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account & Lists</b></a>
     <a href="orders.html"><span class="greeting">Returns</span><br><b>& Orders</b></a>
-    <a href="cart.html" class="cart-link">🛒<span class="cart-count" id="cartCount" style="display:none">0</span></a>
+    <a href="cart.html" class="cart-link"><span class="cart-icon">🛒</span><span class="cart-count" id="cartCount" style="display:none">0</span>Cart</a>
   </div>
 </div>
+<div class="accent-line"></div>
 <div class="subnav">
-  <a href="index.html" class="active">☰ All</a>
+  <a href="index.html">☰ All</a>
   <a href="deals.html">Today's Deals <span class="deals-badge">HOT</span></a>
   <a href="bestsellers.html">Best Sellers</a>
   <a href="categories.html">Categories</a>
-  <a href="books.html">Books</a>
-  <a href="giftcards.html">Gift Cards</a>
   <a href="products.html">All Products</a>
-  <a href="returns.html">Help</a>
   <a href="ai.html" style="color:#ff9900">🤖 AI Assistant</a>
 </div>
+
 <div class="container">
+  <div class="breadcrumb"><a href="index.html">Home</a> / <a href="cart.html">Cart</a> / Checkout</div>
+  <a href="cart.html" class="back-to-cart">← Back to Cart</a>
+  <h1 style="margin:0 0 16px;font-size:28px">💳 Checkout</h1>
 
-<div class="breadcrumb"><a href="index.html">Home</a> / Cart / Checkout</div>
-<h1 style="margin:20px 0 10px;font-size:28px">💳 Checkout</h1>
-<div class="card">
-  <h2 style="margin-bottom:16px">Shipping Address</h2>
-  <div class="form-group"><label>Full Name</label><input type="text" placeholder="John Doe"></div>
-  <div class="form-group"><label>Address</label><input type="text" placeholder="123 Main Street"></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-    <div class="form-group"><label>City</label><input type="text" placeholder="Cairo"></div>
-    <div class="form-group"><label>ZIP Code</label><input type="text" placeholder="12345"></div>
-  </div>
-  <div class="form-group"><label>Phone</label><input type="tel" placeholder="+20 123 456 7890"></div>
-</div>
-<div class="card">
-  <h2 style="margin-bottom:16px">Payment Method</h2>
-  <div style="display:flex;gap:12px;flex-wrap:wrap">
-    <label style="flex:1;min-width:150px;padding:16px;border:2px solid var(--primary);border-radius:8px;cursor:pointer;text-align:center;background:#fff8f0"><input type="radio" name="pay" checked> 💳 Credit Card</label>
-    <label style="flex:1;min-width:150px;padding:16px;border:2px solid var(--border);border-radius:8px;cursor:pointer;text-align:center"><input type="radio" name="pay"> 📱 Mobile Pay</label>
-    <label style="flex:1;min-width:150px;padding:16px;border:2px solid var(--border);border-radius:8px;cursor:pointer;text-align:center"><input type="radio" name="pay"> 🏦 Bank Transfer</label>
-  </div>
-</div>
-<div style="text-align:right;margin:20px 0"><button class="btn btn-primary" style="font-size:16px;padding:14px 32px" onclick="alert('Order placed! Thank you.');localStorage.removeItem('fahd_cart');location.href='orders.html'">Place Order →</button></div>
+  <div class="checkout-layout">
+    <!-- Left: Forms -->
+    <div class="checkout-forms">
+      
+      <!-- Customer Info -->
+      <div class="checkout-section">
+        <h2><span class="step-num">1</span> Customer Information</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="custName" placeholder="Mohamed Ahmed" required>
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="custEmail" placeholder="mohamed@gmail.com" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="tel" id="custPhone" placeholder="+20 123 456 7890" required>
+          </div>
+          <div class="form-group">
+            <label>Alternative Phone</label>
+            <input type="tel" id="custPhone2" placeholder="+20 100 000 0000">
+          </div>
+        </div>
+      </div>
 
+      <!-- Shipping Address -->
+      <div class="checkout-section">
+        <h2><span class="step-num">2</span> Home Address</h2>
+        <div class="form-group">
+          <label>Street Address *</label>
+          <input type="text" id="addrStreet" placeholder="123 Main Street, Building 5, Apt 12" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>City *</label>
+            <input type="text" id="addrCity" placeholder="Cairo" required>
+          </div>
+          <div class="form-group">
+            <label>State / Governorate</label>
+            <input type="text" id="addrState" placeholder="Cairo Governorate">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ZIP / Postal Code *</label>
+            <input type="text" id="addrZip" placeholder="11511" required>
+          </div>
+          <div class="form-group">
+            <label>Country *</label>
+            <select id="addrCountry" required>
+              <option value="">Select country</option>
+              <option value="Egypt" selected>🇪🇬 Egypt</option>
+              <option value="Saudi Arabia">🇸🇦 Saudi Arabia</option>
+              <option value="UAE">🇦🇪 UAE</option>
+              <option value="Kuwait">🇰🇼 Kuwait</option>
+              <option value="Qatar">🇶🇦 Qatar</option>
+              <option value="Bahrain">🇧🇭 Bahrain</option>
+              <option value="Oman">🇴🇲 Oman</option>
+              <option value="Jordan">🇯🇴 Jordan</option>
+              <option value="Lebanon">🇱🇧 Lebanon</option>
+              <option value="Iraq">🇮🇶 Iraq</option>
+              <option value="USA">🇺🇸 USA</option>
+              <option value="UK">🇬🇧 UK</option>
+              <option value="Germany">🇩🇪 Germany</option>
+              <option value="France">🇫🇷 France</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Apartment / Floor / Landmark (optional)</label>
+          <input type="text" id="addrLandmark" placeholder="Near mosque, 3rd floor, flat 5">
+        </div>
+      </div>
+
+      <!-- Payment Method -->
+      <div class="checkout-section">
+        <h2><span class="step-num">3</span> Payment Method</h2>
+        <div class="payment-options" id="paymentOptions">
+          <label class="payment-opt selected" onclick="selectPayment(this)">
+            <input type="radio" name="pay" value="cod" checked>
+            <div class="icon">💵</div>
+            <div class="label">Cash on Delivery</div>
+          </label>
+          <label class="payment-opt" onclick="selectPayment(this)">
+            <input type="radio" name="pay" value="card">
+            <div class="icon">💳</div>
+            <div class="label">Credit / Debit Card</div>
+          </label>
+          <label class="payment-opt" onclick="selectPayment(this)">
+            <input type="radio" name="pay" value="mobile">
+            <div class="icon">📱</div>
+            <div class="label">Mobile Pay</div>
+          </label>
+        </div>
+        <div id="cardFields" style="display:none;margin-top:16px">
+          <div class="form-row">
+            <div class="form-group"><label>Card Number</label><input type="text" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)"></div>
+            <div class="form-row" style="gap:8px">
+              <div class="form-group"><label>Expiry</label><input type="text" placeholder="MM/YY" maxlength="5"></div>
+              <div class="form-group"><label>CVV</label><input type="text" placeholder="123" maxlength="4"></div>
+            </div>
+          </div>
+          <div class="form-group"><label>Cardholder Name</label><input type="text" placeholder="Name on card"></div>
+        </div>
+      </div>
+
+      <!-- Delivery Notes -->
+      <div class="checkout-section">
+        <h2><span class="step-num">4</span> Delivery Notes</h2>
+        <div class="form-group">
+          <label>Order Notes (optional)</label>
+          <textarea id="orderNotes" rows="3" style="width:100%;padding:10px;border:1px solid #a6a6a6;border-radius:4px;font-size:14px;font-family:inherit;resize:vertical" placeholder="Special delivery instructions, preferred time, etc."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Order Summary -->
+    <div>
+      <div class="checkout-section order-summary">
+        <h2>📋 Order Summary</h2>
+        <div id="orderItems"></div>
+        <div style="margin-top:12px">
+          <div class="summary-row"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+          <div class="summary-row shipping"><span>Shipping</span><span>FREE</span></div>
+          <div class="summary-row"><span>Tax (0%)</span><span>$0.00</span></div>
+          <div class="summary-row" id="savingsRow" style="display:none;color:#cc0c39;font-weight:700"><span>You Save</span><span id="savings">$0.00</span></div>
+          <div class="summary-total"><span>Total</span><span id="total">$0.00</span></div>
+        </div>
+        <button class="place-order-btn" onclick="placeOrder()">🔒 Place Order →</button>
+        <div class="secure-badge">
+          <span>🔒 Secure Checkout</span> · SSL Encrypted<br>
+          Your information is safe with us
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
 <div class="footer">
   <div class="footer-back" onclick="window.scrollTo(0,0)">Back to top</div>
-  <div class="footer-grid">
-    <div><h4>Get to Know Us</h4>
-      <a href="about.html">About Fahd Shop</a>
-      <a href="contact.html">Contact Us</a>
-      <a href="ai.html">AI Assistant</a>
-    </div>
-    <div><h4>Make Money with Us</h4>
-      <a href="admin.html">Sell on Fahd Shop</a>
-      <a href="admin.html">Host Dashboard</a>
-      <a href="products.html">Advertise Products</a>
-    </div>
-    <div><h4>Help & Support</h4>
-      <a href="returns.html">Returns & Refunds</a>
-      <a href="contact.html">Contact Us</a>
-      <a href="returns.html">FAQ</a>
-    </div>
-    <div><h4>Your Account</h4>
-      <a href="account.html">Your Account</a>
-      <a href="orders.html">Your Orders</a>
-      <a href="wishlist.html">Your Wishlist</a>
-      <a href="cart.html">Your Cart</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="logo">Fahd<span>Shop</span></div>
-    <p>© 2026 Fahd Shop. All rights reserved. | <a href="about.html" style="color:#999">Privacy</a> | <a href="about.html" style="color:#999">Terms</a></p>
-  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-bottom"><div class="logo">Fahd<span>Shop</span></div><p>© 2026 Fahd Shop. All rights reserved.</p></div>
 </div>
+
 <script src="app.js"></script>
-<script>updateCartCount()</script>
+<script>
+updateCartCount();
+
+// Load saved customer info
+var saved = JSON.parse(localStorage.getItem('fahd_checkout') || '{}');
+if (saved.name) document.getElementById('custName').value = saved.name;
+if (saved.email) document.getElementById('custEmail').value = saved.email;
+if (saved.phone) document.getElementById('custPhone').value = saved.phone;
+if (saved.phone2) document.getElementById('custPhone2').value = saved.phone2;
+if (saved.street) document.getElementById('addrStreet').value = saved.street;
+if (saved.city) document.getElementById('addrCity').value = saved.city;
+if (saved.state) document.getElementById('addrState').value = saved.state;
+if (saved.zip) document.getElementById('addrZip').value = saved.zip;
+if (saved.country) document.getElementById('addrCountry').value = saved.country;
+if (saved.landmark) document.getElementById('addrLandmark').value = saved.landmark;
+
+// Load cart items
+var cart = getCart();
+var container = document.getElementById('orderItems');
+var total = 0;
+var totalSaved = 0;
+
+if (!cart.length) {
+  container.innerHTML = '<p style="text-align:center;color:#999;padding:20px">Your cart is empty. <a href="products.html">Start shopping</a></p>';
+} else {
+  container.innerHTML = cart.map(function(c) {
+    var itemTotal = c.price * c.qty;
+    total += itemTotal;
+    if (c.oldPrice) totalSaved += (c.oldPrice - c.price) * c.qty;
+    return '<div class="order-item">' +
+      '<img src="' + (c.image || '') + '" onerror="this.style.display=\'none\'">' +
+      '<div style="flex:1"><div class="order-item-name">' + (c.name || '') + '</div><div class="order-item-qty">Qty: ' + c.qty + '</div></div>' +
+      '<div class="order-item-price">$' + itemTotal.toFixed(2) + '</div></div>';
+  }).join('');
+}
+
+document.getElementById('subtotal').textContent = '$' + total.toFixed(2);
+document.getElementById('total').textContent = '$' + total.toFixed(2);
+if (totalSaved > 0) {
+  document.getElementById('savingsRow').style.display = 'flex';
+  document.getElementById('savings').textContent = '-$' + totalSaved.toFixed(2);
+}
+
+function selectPayment(el) {
+  document.querySelectorAll('.payment-opt').forEach(function(o) { o.classList.remove('selected'); });
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+  document.getElementById('cardFields').style.display = el.querySelector('input').value === 'card' ? 'block' : 'none';
+}
+
+function formatCard(el) {
+  var v = el.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
+  el.value = v;
+}
+
+function saveForm() {
+  var data = {
+    name: document.getElementById('custName').value,
+    email: document.getElementById('custEmail').value,
+    phone: document.getElementById('custPhone').value,
+    phone2: document.getElementById('custPhone2').value,
+    street: document.getElementById('addrStreet').value,
+    city: document.getElementById('addrCity').value,
+    state: document.getElementById('addrState').value,
+    zip: document.getElementById('addrZip').value,
+    country: document.getElementById('addrCountry').value,
+    landmark: document.getElementById('addrLandmark').value
+  };
+  localStorage.setItem('fahd_checkout', JSON.stringify(data));
+}
+
+function placeOrder() {
+  // Validate required fields
+  var name = document.getElementById('custName').value.trim();
+  var email = document.getElementById('custEmail').value.trim();
+  var phone = document.getElementById('custPhone').value.trim();
+  var street = document.getElementById('addrStreet').value.trim();
+  var city = document.getElementById('addrCity').value.trim();
+  var zip = document.getElementById('addrZip').value.trim();
+  var country = document.getElementById('addrCountry').value;
+
+  if (!name) { alert('Please enter your full name'); document.getElementById('custName').focus(); return; }
+  if (!email) { alert('Please enter your email'); document.getElementById('custEmail').focus(); return; }
+  if (!phone) { alert('Please enter your phone number'); document.getElementById('custPhone').focus(); return; }
+  if (!street) { alert('Please enter your street address'); document.getElementById('addrStreet').focus(); return; }
+  if (!city) { alert('Please enter your city'); document.getElementById('addrCity').focus(); return; }
+  if (!zip) { alert('Please enter your ZIP code'); document.getElementById('addrZip').focus(); return; }
+  if (!country) { alert('Please select your country'); document.getElementById('addrCountry').focus(); return; }
+  if (!cart.length) { alert('Your cart is empty'); return; }
+
+  // Save form for next time
+  saveForm();
+
+  var paymentMethod = document.querySelector('input[name="pay"]:checked').value;
+  var paymentLabels = { cod: 'Cash on Delivery', card: 'Credit/Debit Card', mobile: 'Mobile Pay' };
+  var notes = document.getElementById('orderNotes').value.trim();
+
+  // Build order
+  var user = getCurrentUser();
+  var orderData = {
+    user: email,
+    customerName: name,
+    phone: phone,
+    phone2: document.getElementById('custPhone2').value.trim(),
+    address: street + ', ' + city + (document.getElementById('addrState').value ? ', ' + document.getElementById('addrState').value : '') + ', ' + zip + ', ' + country,
+    addressDetail: document.getElementById('addrLandmark').value.trim(),
+    paymentMethod: paymentLabels[paymentMethod] || paymentMethod,
+    notes: notes,
+    items: cart,
+    total: total
+  };
+
+  fetch('/api/orders', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(orderData)
+  }).then(function() {
+    // Clear cart
+    localStorage.removeItem('fahd_cart');
+    
+    // Show success
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:9999';
+    overlay.innerHTML = '<div style="background:#fff;border-radius:16px;padding:40px;text-align:center;max-width:400px;margin:20px;animation:pop .3s">' +
+      '<div style="font-size:64px;margin-bottom:16px">✅</div>' +
+      '<h2 style="margin-bottom:8px">Order Placed!</h2>' +
+      '<p style="color:#565959;margin-bottom:8px">Thank you, <b>' + name + '</b>!</p>' +
+      '<p style="color:#565959;font-size:14px;margin-bottom:4px">📱 ' + phone + '</p>' +
+      '<p style="color:#565959;font-size:14px;margin-bottom:16px">📍 ' + street + ', ' + city + '</p>' +
+      '<p style="color:#565959;font-size:14px;margin-bottom:20px">💳 ' + (paymentLabels[paymentMethod] || 'Cash on Delivery') + '</p>' +
+      '<div style="background:#f7f7f7;padding:12px;border-radius:8px;margin-bottom:20px"><b style="font-size:20px;color:#b12704">$' + total.toFixed(2) + '</b></div>' +
+      '<a href="orders.html" style="display:block;padding:12px;background:linear-gradient(to bottom,#f7dfa5,#f0c14b);border:1px solid #a88734;border-radius:8px;font-weight:700;text-decoration:none;color:#000">View My Orders →</a>' +
+      '<a href="index.html" style="display:block;margin-top:10px;color:#007185;font-size:14px;text-decoration:none">← Continue Shopping</a>' +
+      '</div>';
+    document.body.appendChild(overlay);
+  }).catch(function() {
+    alert('Order placed locally!');
+    localStorage.removeItem('fahd_cart');
+    location.href = 'orders.html';
+  });
+}
+</script>
 </body>
 </html>
