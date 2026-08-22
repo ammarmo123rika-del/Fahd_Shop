@@ -42,6 +42,10 @@ async function loadProducts() {
   } catch(e) { productsData = []; }
   return productsData;
 }
+function imgTag(url, name, sz) {
+  if (url && url.indexOf('http') === 0) return '<img src="' + url + '" style="max-width:100%;max-height:' + (sz||160) + 'px;object-fit:contain;border-radius:8px" alt="' + (name||'Product') + '">';
+  return '<div style="font-size:' + (sz||48) + 'px">' + (url || '\uD83D\uDCE6') + '</div>';
+}
 
 function esc(s) {
   return String(s || '').replace(/[&<>"]/g, function(c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; });
@@ -64,7 +68,7 @@ function renderProducts(containerId, limit) {
       for (var i = 0; i < r; i++) stars += '\u2605';
       for (var j = r; j < 5; j++) stars += '\u2606';
       return '<div class="card" style="cursor:pointer" onclick="location.href=\'product.html?id=' + p.id + '\'">' +
-        '<div style="font-size:48px;text-align:center;margin:10px 0">' + (p.image || '\uD83D\uDCE6') + '</div>' +
+        imgTag(p.image, p.name, 160) +
         '<h3 style="font-size:15px;margin:8px 0 4px">' + esc(p.name) + '</h3>' +
         '<div style="color:#666;font-size:13px">' + esc(p.category || '') + '</div>' +
         '<div style="margin-top:8px"><b style="color:#e63946;font-size:18px">$' + p.price + '</b>' +
@@ -120,7 +124,7 @@ function renderCart() {
   var total = cart.reduce(function(s, c) { return s + c.price * c.qty; }, 0);
   container.innerHTML = cart.map(function(c) {
     return '<div class="card" style="display:flex;align-items:center;gap:16px">' +
-      '<div style="font-size:36px">' + (c.image || '\uD83D\uDCE6') + '</div>' +
+      imgTag(c.image, c.name, 80) +
       '<div style="flex:1"><b>' + esc(c.name) + '</b><div style="color:#666">$' + c.price + ' x ' + c.qty + ' = <b>$' + (c.price*c.qty).toFixed(2) + '</b></div></div>' +
       '<div style="display:flex;align-items:center;gap:8px">' +
       '<button onclick="changeQty(' + c.id + ',-1)" style="padding:4px 10px;font-size:16px">-</button>' +
