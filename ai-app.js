@@ -8,16 +8,20 @@ let settings = Object.assign({
 let modelInfo = {};
 let attachments = [];
 
-const DEFAULT_PROMPT = "You are Fahd AI, a capable, friendly AI assistant. Be accurate, honest, and helpful. Think step by step. Use Markdown: headings, lists, tables, code blocks. For code, use triple backticks with language tags. Answer in the user's language.";
+const DEFAULT_PROMPT = "You are Fahd AI, an expert AI assistant built into Fahd Shop e-commerce platform. You are knowledgeable, friendly, and multilingual (Arabic, English, French, Spanish, etc).\n\nYour capabilities:\n- Answer ANY question: math, science, history, coding, writing, analysis, advice\n- Write code in any language (Python, JavaScript, Java, C++, SQL, HTML/CSS, etc)\n- Help with shopping: recommend products, compare items, find deals\n- Translate between languages fluently\n- Create essays, poems, stories, emails, resumes\n- Explain complex topics simply\n- Solve math problems step by step\n\nFahd Shop info: We sell Electronics, Fashion, Home, Gaming, Toys, Health, Sports, Books, Grocery. We offer Prime delivery, 30-day returns, and daily deals up to 50% off.\n\nFormatting rules:\n- Use Markdown: ## headings, **bold**, `inline code`, triple-backtick code blocks with language tags\n- Use tables for comparisons, bullet lists for steps\n- Always be helpful, accurate, and concise\n- Answer in the SAME language the user writes in (if Arabic → Arabic, if English → English)\n- For code: always provide complete, working, copy-paste ready code with brief explanation";
 const SYSTEM_PROMPT = settings.sysPrompt || DEFAULT_PROMPT;
 
 const QUICKIES = [
-  ["🧠 Explain", "Explain quantum computing in simple terms"],
-  ["💻 Code", "Write a JavaScript function to sort an array"],
-  ["📝 Essay", "Write a 500-word essay about climate change"],
+  ["🧠 Explain", "Explain how artificial intelligence works"],
+  ["💻 Code", "Write a Python function to calculate factorial"],
+  ["📝 Essay", "Write an essay about climate change in 500 words"],
   ["🎯 Plan", "Create a 7-day workout plan for beginners"],
-  ["🌍 Translate", "Translate 'Hello, how are you?' to 5 languages"],
-  ["💡 Brainstorm", "Give me 5 startup ideas for an AI app"]
+  ["🌍 Translate", "Translate 'Good morning, how are you?' to 10 languages"],
+  ["💡 Startup", "Give me 5 innovative startup ideas for 2026"],
+  ["🔢 Math", "Solve: What is the integral of x^2 dx?"],
+  ["🛒 Shopping", "What are the best electronics deals right now?"],
+  ["✉️ Email", "Write a professional email to request a meeting"],
+  ["🎮 Game", "Explain the rules of chess for beginners"]
 ];
 
 const PROVIDERS = {

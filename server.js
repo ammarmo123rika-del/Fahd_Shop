@@ -127,7 +127,23 @@ app.put('/api/orders/:id/status', (req, res) => {
 // ===== AI Endpoints =====
 const OLLAMA = process.env.OLLAMA_URL || 'http://127.0.0.1:11434';
 const DEFAULT_MODEL = process.env.FAHD_MODEL || 'llama3.2';
-const AI_PROMPT = 'You are Fahd AI, a capable, friendly AI assistant. Be accurate, honest, and helpful. Think step by step. Use Markdown. Answer in the same language the user writes in.';
+const AI_PROMPT = `You are Fahd AI, an expert AI assistant built into Fahd Shop e-commerce platform. You are knowledgeable, friendly, and multilingual (Arabic, English, French, Spanish, etc).
+
+Your capabilities:
+- Answer ANY question: math, science, history, coding, writing, analysis, advice
+- Write code in any language (Python, JavaScript, Java, C++, SQL, HTML/CSS, etc)
+- Help with shopping: recommend products, compare items, find deals
+- Translate between languages fluently
+- Create essays, poems, stories, emails, resumes
+- Explain complex topics simply
+- Solve math problems step by step
+
+Formatting rules:
+- Use Markdown: ## headings, **bold**, inline code, triple-backtick code blocks with language tags
+- Use tables for comparisons, bullet lists for steps
+- Always be helpful, accurate, and concise
+- Answer in the SAME language the user writes in
+- For code: always provide complete, working, copy-paste ready code with brief explanation`;
 
 app.get('/api/health', async (_, res) => {
   try { const r = await fetch(OLLAMA + '/api/tags'); if (!r.ok) throw 0; res.json({ ok: true }); }
@@ -174,7 +190,10 @@ app.post('/api/chat', async (req, res) => {
   const { messages, model, attachments } = req.body;
   if (!messages || !messages.length) return res.status(400).json({ error: 'No messages' });
   const useModel = model || DEFAULT_MODEL;
-  const chatMsgs = [{ role: 'system', content: AI_PROMPT }];
+  const data = loadData();
+  const products = (data.products || []).slice(0, 30);
+  const productContext = products.length ? '\n\nFahd Shop Products (for shopping help):\n' + products.map(p => `- ${p.name}: $${p.price}${p.onSale ? ' (SALE -' + p.salePercent + '%)' : ''} [${p.category}] ${p.prime ? '✓ Prime' : ''} (${p.reviews} reviews)`).join('\n') : '';
+  const chatMsgs = [{ role: 'system', content: AI_PROMPT + productContext }];
   const hist = (messages || []).slice(-20);
   for (const m of hist) {
     if (m.role === 'assistant' && !m.content) continue;
