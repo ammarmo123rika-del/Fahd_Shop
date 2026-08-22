@@ -64,22 +64,20 @@ function renderProducts(containerId, limit) {
     if (!filtered.length) { container.innerHTML = '<p style="color:#666;text-align:center">No products found.</p>'; return; }
     container.innerHTML = filtered.map(function(p) {
       var stars = '';
-      var r = Math.round(p.rating || 0);
-      for (var i = 0; i < r; i++) stars += '\u2605';
-      for (var j = r; j < 5; j++) stars += '\u2606';
-      return '<div class="card" style="cursor:pointer" onclick="location.href=\'product.html?id=' + p.id + '\'">' +
-        imgTag(p.image, p.name, 160) +
-        '<h3 style="font-size:15px;margin:8px 0 4px">' + esc(p.name) + '</h3>' +
-        '<div style="color:#666;font-size:13px">' + esc(p.category || '') + '</div>' +
-        '<div style="margin-top:8px"><b style="color:#e63946;font-size:18px">$' + p.price + '</b>' +
-        (p.oldPrice ? ' <span style="color:#999;text-decoration:line-through;font-size:13px">$' + p.oldPrice + '</span>' : '') +
+      return '<div class="product-card" onclick="location.href=\'product.html?id=' + p.id + '\'">' +
+        '<div class="img-wrap">' + imgTag(p.image, p.name, 160) + '</div>' +
+        '<div class="info">' +
+        '<div class="title">' + esc(p.name) + '</div>' +
+        '<div class="category">' + esc(p.category || '') + '</div>' +
+        '<div class="stars"><span class="star-color">' + stars + '</span><span class="count">(' + (p.reviews || 0) + ')</span></div>' +
+        '<div class="price">' +
+        '<span class="current">$' + p.price + '</span>' +
+        (p.oldPrice ? ' <span class="old">$' + p.oldPrice + '</span>' : '') +
+        (p.onSale ? ' <span class="badge">-' + p.salePercent + '%</span>' : '') +
         '</div>' +
-        (p.onSale ? '<div style="background:#ff6b35;color:#fff;display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:bold;margin-top:4px">-' + p.salePercent + '%</div>' : '') +
-        '<div style="display:flex;align-items:center;gap:4px;margin-top:6px;font-size:12px;color:#f59e0b">' +
-        stars + ' <span style="color:#999">(' + (p.reviews || 0) + ')</span></div>' +
-        (p.prime ? '<div style="color:#059669;font-size:11px;font-weight:bold;margin-top:2px">\u2713 Prime</div>' : '') +
-        '<button class="btn" style="width:100%;margin-top:10px" onclick="event.stopPropagation();addToCart(' + p.id + ')">Add to Cart</button>' +
-        '</div>';
+        (p.prime ? '<div class="prime">\u2713 Prime</div>' : '') +
+        '<button class="btn-cart" onclick="event.stopPropagation();addToCart(' + p.id + ')">Add to Cart</button>' +
+        '</div></div>';
     }).join('');
   });
 }
