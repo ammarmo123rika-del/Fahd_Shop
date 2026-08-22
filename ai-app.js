@@ -376,9 +376,15 @@ async function loadModels() {
       if (m.name === settings.model) o.selected = true;
       sel.appendChild(o);
     }
-    if (!settings.model && d.models.length) { settings.model = d.models[0].name; save(); }
+    // Auto-select best model if none chosen
+    if (!settings.model && d.models.length) {
+      settings.model = d.models[0].name;
+      save();
+    }
     if (sel.value) settings.model = sel.value;
-    $("modelcap").textContent = modelInfo[settings.model] ? "Capabilities: " + (modelInfo[settings.model].vision ? "vision " : "") + (modelInfo[settings.model].tools ? "tools " : "") || "none" : "Download a model below.";
+    // Update brain icon
+    $("modelcap").textContent = "Auto-selected: " + (settings.model || "none");
+    updateHeaderModel();
   } catch (e) {
     $("errbox").textContent = "Could not reach Ollama. Make sure it's running."; $("errbox").style.display = "block";
   }
@@ -409,7 +415,7 @@ async function pullModel() {
 
 function setModel(v) { settings.model = v; save(); updateHeaderModel(); }
 function updateHeaderModel() {
-  $("modelname").textContent = isCloud() ? (settings.cloudModel || "choose model") + " ☁️" : settings.model || "choose model";
+  $("modelname").textContent = "Fahd Brain";
 }
 function setLang(v) { settings.lang = v; save(); }
 
@@ -451,18 +457,12 @@ function openSettings() {
 function closeSettings() { $("overlay").classList.remove("open"); }
 
 function populateModelMenu() {
-  if (isCloud()) {
-    const p = PROVIDERS[settings.provider];
-    const presets = p ? p.models : [];
-    $("modellist").innerHTML = presets.map(n => 
-      `<div class="modelitem" onclick="pickCloudModel('${n}')"><span>${n}</span>${n === (settings.cloudModel || "") ? '<span class="ck">✓</span>' : ""}</div>`
-    ).join("") + `<div style="padding:9px 10px;font-size:11px;color:var(--muted)">Type any model in Settings</div>`;
-    return;
-  }
   let names = Object.keys(modelInfo);
-  $("modellist").innerHTML = names.length ? names.map(n =>
-    `<div class="modelitem" onclick="pickModel('${n.replace(/'/g, "\\'")}')"><span>${esc(n)}${modelInfo[n].vision ? " 👁" : ""}</span>${n === settings.model ? '<span class="ck">✓</span>' : ""}</div>`
-  ).join("") : `<div style="padding:10px;color:var(--muted);font-size:12px">No models — manage in Settings.</div>`;
+  $("modellist").innerHTML = names.length ? 
+    `<div style="padding:8px 10px;font-size:12px;font-weight:700;color:var(--muted)">🧠 Fahd Brain (auto-selected)</div>` +
+    names.map(n =>
+      `<div class="modelitem" onclick="pickModel('${n.replace(/'/g, "\\'")}')"><span>${esc(n)}${modelInfo[n].vision ? " 👁" : ""}${modelInfo[n].tools ? " ⚙️" : ""}</span>${n === settings.model ? '<span class="ck">✓ Active</span>' : ""}</div>`
+    ).join("") : `<div style="padding:10px;color:var(--muted);font-size:12px">No models — Ollama not running?</div>`;
 }
 
 function pickModel(n) { setModel(n); closeModelMenu(); }
