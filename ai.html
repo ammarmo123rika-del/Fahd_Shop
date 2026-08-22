@@ -3,41 +3,57 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Fahd AI</title>
+<title>Fahd AI — Smart Assistant</title>
 <link rel="stylesheet" href="ai-style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-theme">
 </head>
 <body>
 <div class="app">
+
+<!-- Sidebar -->
 <aside class="side" id="side">
   <div class="brand">
-    <span class="tile">✦</span>
-    <span class="t">Fahd AI<span class="s">Local AI • No API key</span></span>
+    <div class="logo-wrap"><span class="tile">✦</span></div>
+    <div class="brand-text">
+      <span class="t">Fahd AI</span>
+      <span class="s">Smart Assistant</span>
+    </div>
   </div>
-  <a href="index.html" style="display:inline-block;text-decoration:none;color:var(--primary);font-size:12px;margin-bottom:12px;border:1px solid var(--border);border-radius:8px;padding:6px 10px;background:var(--panel);text-align:center;font-weight:600">← Back to Shop</a>
-  <button class="btnnew" onclick="newChat()">＋ New chat</button>
-  <div class="search">⌕ <input id="find" placeholder="Search history" oninput="drawHistory()"></div>
-  <div class="sidelabel">History</div>
+  <a href="index.html" class="back-shop">← Back to Fahd Shop</a>
+  <button class="btnnew" onclick="newChat()">＋ New Chat</button>
+  
+  <div class="search">⌕ <input id="find" placeholder="Search conversations…" oninput="drawHistory()"></div>
+  
+  <div class="sidelabel">Recent Chats</div>
   <div id="history" class="history"></div>
+  
   <div class="sidefoot">
     <div class="row1">
       <span class="me">Personal AI</span>
       <button class="iconbtn" id="themebtn" title="Toggle dark mode" onclick="toggleTheme()">🌙</button>
       <button class="iconbtn" title="Settings" onclick="openSettings()">⚙️</button>
     </div>
-    <button class="clearall" onclick="clearAll()">🗑 Delete all history</button>
+    <div class="foot-actions">
+      <button class="action-btn export-btn" onclick="exportChat()" title="Export current chat">📥 Export</button>
+      <button class="action-btn clear-btn" onclick="clearAll()" title="Delete all history">🗑 Clear All</button>
+    </div>
   </div>
 </aside>
+
 <div class="backdrop" id="backdrop" onclick="toggleSide()"></div>
 
+<!-- Main Content -->
 <main class="main">
   <header class="top">
     <div style="display:flex;align-items:center;gap:4px;min-width:0">
       <button class="hamburger" id="burger" onclick="toggleSide()" aria-label="Menu">☰</button>
-      <span class="topname">Fahd AI <span class="dot">• Real AI</span></span>
+      <span class="topname">Fahd AI <span class="dot" id="chatTitle">New chat</span></span>
     </div>
     <div class="topright">
       <div class="mwrap">
-        <button id="modelbtn" class="modelbtn" onclick="toggleModels()" title="Switch AI model">🧠 <span id="modelname" class="mname">loading…</span> <span>▾</span></button>
+        <button id="modelbtn" class="modelbtn" onclick="toggleModels()" title="Switch AI model">
+          🧠 <span id="modelname" class="mname">loading…</span> <span>▾</span>
+        </button>
         <div id="modelmenu" class="modelmenu hidden">
           <div id="modellist" class="modellist"></div>
           <div class="mfoot"><button onclick="closeModelMenu();openSettings()">⚙️ Manage models…</button></div>
@@ -47,76 +63,105 @@
     </div>
   </header>
 
-  <section class="messages"><div id="banner"></div><div id="inner" class="inner"></div></section>
+  <section class="messages">
+    <div id="banner"></div>
+    <div id="inner" class="inner"></div>
+  </section>
 
   <div class="composer">
     <div id="attached" class="attached"></div>
     <div class="row">
       <button class="tbtn" title="Attach files" onclick="pickFiles()">📎</button>
-      <textarea id="input" placeholder="Ask Fahd AI anything..." onkeydown="key(event)"></textarea>
-      <button class="tbtn mic" id="micbtn" title="Voice input" onclick="mic()">🎤</button>
-      <button class="send" onclick="send()" title="Send">➤</button>
+      <textarea id="input" placeholder="Ask Fahd AI anything…" onkeydown="key(event)" rows="1"></textarea>
+      <button class="tbtn mic" id="micbtn" title="Voice input (hold)" onmousedown="mic()" onmouseup="micStop()" onmouseleave="micStop()">🎤</button>
+      <button class="send" onclick="send()" title="Send message">➤</button>
     </div>
-    <div class="hint">Real AI • Chat history is saved in this browser</div>
+    <div class="hint">Smart AI · Chat history saved locally · Press Enter to send</div>
   </div>
 </main>
 </div>
-<input type="file" id="filepick" multiple accept="image/*,.txt,.md,.json,.js,.html,.css,.csv,.log" style="display:none" onchange="addFiles(this.files)">
 
-<!-- Settings modal -->
+<input type="file" id="filepick" multiple accept="image/*,.txt,.md,.json,.js,.html,.css,.csv,.log,.py,.cpp,.java" style="display:none" onchange="addFiles(this.files)">
+
+<!-- Settings Modal -->
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeSettings()">
   <div class="card">
-    <h3>⚙️ Settings</h3>
-    <div class="sub">Choose how Fahd AI connects: your local Ollama, or a cloud AI provider so the online site works anywhere.</div>
+    <div class="card-header">
+      <h3>⚙️ Settings</h3>
+      <button class="close-x" onclick="closeSettings()">✕</button>
+    </div>
+    <div class="sub">Choose how Fahd AI connects — local Ollama or cloud AI provider.</div>
+    
     <div class="field">
       <label>AI Provider</label>
       <select id="provsel" onchange="setProvider(this.value)">
-        <option value="ollama">Ollama (local — no key)</option>
-        <option value="openai">OpenAI (GPT)</option>
-        <option value="gemini">Google Gemini</option>
-        <option value="anthropic">Anthropic (Claude)</option>
+        <option value="ollama">🏠 Ollama (Local — Free, no API key)</option>
+        <option value="openai">🟢 OpenAI (GPT)</option>
+        <option value="gemini">🔵 Google Gemini</option>
+        <option value="anthropic">🟤 Anthropic (Claude)</option>
       </select>
     </div>
-    <div class="field" id="cloudfields" style="display:none">
-      <label>API Key</label>
-      <input id="apikey" type="password" placeholder="sk-… / AIza… / sk-ant-…" autocomplete="off" onkeydown="if(event.key==='Enter')saveCloud()">
-      <div class="sub" style="margin-top:6px;margin-bottom:0">🔒 Stored only in this browser (localStorage) — never sent to GitHub. Get a key from the provider's site (OpenAI / Google AI Studio / Anthropic).</div>
-      <label style="margin-top:12px;display:block">Model</label>
-      <input id="cloudmodel" list="modelpresets" placeholder="Pick a preset or type any model" onchange="saveCloud()">
-      <datalist id="modelpresets"></datalist>
-      <div id="cloudtest" style="margin-top:8px;font-size:12px"></div>
-    </div>
-    <div id="ollamafields">
-    <div class="field">
-      <label>AI Model</label>
-      <select id="modelsel" onchange="setModel(this.value)"><option value="">Loading…</option></select>
-      <div style="margin-top:7px;display:flex;justify-content:space-between;align-items:center">
-        <button class="reco" style="border:0;background:none;color:var(--primary);padding:0;font-size:12px;font-weight:700" onclick="loadModels()">↻ Refresh list</button>
-        <span id="modelcap" style="font-size:11px;color:var(--muted)"></span>
+
+    <!-- Cloud Fields -->
+    <div id="cloudfields" style="display:none">
+      <div class="field">
+        <label>API Key</label>
+        <input id="apikey" type="password" placeholder="sk-… / AIza… / sk-ant-…" autocomplete="off" onkeydown="if(event.key==='Enter')saveCloud()">
+        <div class="sub" style="margin-top:6px;margin-bottom:0">🔒 Stored in this browser only (localStorage). Never sent to any server.</div>
       </div>
-      <div id="reco"></div>
+      <div class="field">
+        <label>Model</label>
+        <input id="cloudmodel" list="modelpresets" placeholder="Pick a preset or type any model" onchange="saveCloud()">
+        <datalist id="modelpresets"></datalist>
+      </div>
+      <div id="cloudtest" style="margin-top:4px;font-size:12px"></div>
     </div>
+
+    <!-- Ollama Fields -->
+    <div id="ollamafields">
+      <div class="field">
+        <label>AI Model</label>
+        <select id="modelsel" onchange="setModel(this.value)"><option value="">Loading…</option></select>
+        <div style="margin-top:7px;display:flex;justify-content:space-between;align-items:center">
+          <button class="link-btn" onclick="loadModels()">↻ Refresh list</button>
+          <span id="modelcap" style="font-size:11px;color:var(--muted)"></span>
+        </div>
+        <div id="reco"></div>
+      </div>
+      <div class="field">
+        <label>Download a model</label>
+        <div class="flex">
+          <input id="pullname" placeholder="e.g. llama3.2, qwen2.5:7b, llava" onkeydown="if(event.key==='Enter')pullModel()">
+          <button class="primary-btn" onclick="pullModel()">⬇ Install</button>
+        </div>
+        <div id="pullout" class="pullout"></div>
+      </div>
+    </div>
+
     <div class="field">
-      <label>Download a model (e.g. qwen2.5:7b, llava, llama3.2)</label>
-      <div class="flex"><input id="pullname" placeholder="model:tag" onkeydown="if(event.key==='Enter')pullModel()"><button onclick="pullModel()">⬇ Download</button></div>
-      <div id="pullout" class="pullout"></div>
-    </div>
-    </div>
-    <div class="field">
-      <label>Voice language</label>
+      <label>Voice Language</label>
       <select id="langsel" onchange="setLang(this.value)">
-        <option value="auto">Auto</option>
+        <option value="auto">Auto-detect</option>
         <option value="en-US">English</option>
-        <option value="ar-SA">Arabic</option>
+        <option value="ar-SA">Arabic (عربي)</option>
         <option value="fr-FR">French</option>
         <option value="es-ES">Spanish</option>
+        <option value="de-DE">German</option>
+        <option value="tr-TR">Turkish</option>
       </select>
     </div>
+
+    <div class="field">
+      <label>System Prompt (AI Personality)</label>
+      <textarea id="sysprompt" rows="3" placeholder="You are Fahd AI…" oninput="saveSysPrompt()" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;font-size:13px;resize:vertical;background:var(--bg);color:var(--text);font-family:inherit"></textarea>
+    </div>
+
     <div id="errbox" class="errbox"></div>
-    <button class="closebtn" onclick="closeSettings()">Close</button>
+    <button class="closebtn" onclick="closeSettings()">Done</button>
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="ai-app.js"></script>
 </body>
 </html>

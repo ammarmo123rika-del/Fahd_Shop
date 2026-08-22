@@ -1200,6 +1200,22 @@
       "total": 199,
       "date": "2026-08-22T10:36:07.737Z",
       "status": "Pending"
+    },
+    {
+      "id": 4,
+      "user": "host@fahd.shop",
+      "items": [
+        {
+          "id": 2,
+          "name": "Samsung Galaxy S24 Ultra 512GB",
+          "price": 899.25,
+          "image": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=400&fit=crop",
+          "qty": 1
+        }
+      ],
+      "total": 899.25,
+      "date": "2026-08-22T13:07:29.620Z",
+      "status": "Pending"
     }
   ],
   "sales": [

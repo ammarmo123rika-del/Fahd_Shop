@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
 
 const app = express();
 const PORT = process.env.FAHD_PORT || 5000;
@@ -121,6 +122,98 @@ app.put('/api/orders/:id/status', (req, res) => {
   o.status = req.body.status;
   saveData(data);
   res.json(o);
+});
+
+// ===== AI Endpoints =====
+const OLLAMA = process.env.OLLAMA_URL || 'http://127.0.0.1:11434';
+const DEFAULT_MODEL = process.env.FAHD_MODEL || 'llama3.2';
+const AI_PROMPT = 'You are Fahd AI, a capable, friendly AI assistant. Be accurate, honest, and helpful. Think step by step. Use Markdown. Answer in the same language the user writes in.';
+
+app.get('/api/health', async (_, res) => {
+  try { const r = await fetch(OLLAMA + '/api/tags'); if (!r.ok) throw 0; res.json({ ok: true }); }
+  catch { res.status(503).json({ error: 'Ollama not available' }); }
+});
+
+app.get('/api/models', async (_, res) => {
+  try {
+    const r = await fetch(OLLAMA + '/api/tags');
+    const d = await r.json();
+    const models = (d.models || []).map(m => ({
+      name: m.name,
+      vision: m.name.includes('llava') || m.name.includes('vl') || m.name.includes('vision'),
+      tools: (m.details && m.details.capabilities && m.details.capabilities.includes('tools')) || false,
+      size: m.size,
+      family: (m.details && m.details.family) || ''
+    }));
+    res.json({ models });
+  } catch { res.json({ models: [] }); }
+});
+
+app.post('/api/pull', async (req, res) => {
+  const model = req.body.model;
+  if (!model) return res.status(400).json({ error: 'Model name required' });
+  try {
+    const r = await fetch(OLLAMA + '/api/pull', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: model })
+    });
+    res.setHeader('Content-Type', 'application/x-ndjson');
+    const reader = r.body.getReader();
+    const decoder = new TextDecoder();
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      res.write(decoder.decode(value, { stream: true }));
+    }
+    res.end();
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/chat', async (req, res) => {
+  const { messages, model, attachments } = req.body;
+  if (!messages || !messages.length) return res.status(400).json({ error: 'No messages' });
+  const useModel = model || DEFAULT_MODEL;
+  const chatMsgs = [{ role: 'system', content: AI_PROMPT }];
+  const hist = (messages || []).slice(-20);
+  for (const m of hist) {
+    if (m.role === 'assistant' && !m.content) continue;
+    chatMsgs.push({ role: m.role, content: m.content || '' });
+  }
+  if (attachments && attachments.length) {
+    const last = chatMsgs[chatMsgs.length - 1];
+    if (last && last.role === 'user') {
+      const parts = attachments.map(a => {
+        if (a.type === 'text') return '[File: ' + a.name + ']\n' + Buffer.from(a.data || '', 'base64').toString('utf8');
+        return '[Image: ' + a.name + ']';
+      });
+      last.content = (last.content || '') + '\n\n--- Attachments ---\n' + parts.join('\n\n');
+    }
+  }
+  res.setHeader('Content-Type', 'application/x-ndjson');
+  try {
+    const postData = JSON.stringify({ model: useModel, messages: chatMsgs, stream: true });
+    const oReq = http.request(OLLAMA + '/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(postData) }
+    }, (oRes) => {
+      oRes.on('data', (chunk) => {
+        const lines = chunk.toString().split('\n').filter(Boolean);
+        for (const line of lines) {
+          try {
+            const obj = JSON.parse(line);
+            if (obj.message && obj.message.content) {
+              res.write(JSON.stringify({ d: obj.message.content }) + '\n');
+            }
+          } catch {}
+        }
+      });
+      oRes.on('end', () => res.end());
+    });
+    oReq.on('error', (e) => { res.write(JSON.stringify({ error: e.message }) + '\n'); res.end(); });
+    oReq.write(postData);
+    oReq.end();
+  } catch (e) { res.write(JSON.stringify({ error: e.message }) + '\n'); res.end(); }
 });
 
 // Derived: Customers
