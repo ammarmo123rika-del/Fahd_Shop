@@ -3,44 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fahd Shop - Fahd Shop</title>
+<title>Fahd Shop</title>
 <link rel="stylesheet" href="style.css">
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  renderProducts('featured', 8);
-  fetch('/api/products').then(r=>r.json()).then(products => {
-    // Best sellers by reviews
-    var sorted = products.slice().sort((a,b) => (b.reviews||0)-(a.reviews||0));
-    var bs = document.getElementById('bestsellers');
-    if(bs && sorted.length) {
-      bs.innerHTML = sorted.slice(0,4).map(p => {
-        var stars='';var r=Math.round(p.rating||0);for(var i=0;i<r;i++)stars+='\u2605';for(var j=r;j<5;j++)stars+='\u2606';
-        return '<div class="product-card" onclick="location.href=\'product.html?id='+p.id+'\'"><div class="img-wrap">'+imgTag(p.image, p.name, 160)+'</div><div class="info"><div class="title">'+p.name+'</div><div class="stars"><span class="star-color">'+stars+'</span><span class="count">('+p.reviews+')</span></div><div class="price"><span class="current">$'+p.price+'</span>'+(p.oldPrice?'<span class="old">$'+p.oldPrice+'</span>':'')+(p.onSale?'<span class="badge">-'+p.salePercent+'%</span>':'')+'</div>'+(p.prime?'<div class="prime">✓ Prime</div>':'')+'</div></div>';
-      }).join('');
-    }
-    // Categories
-    var catSet={};products.forEach(p=>{if(p.category)catSet[p.category]=1;});
-    var cats=Object.keys(catSet);
-    var icons={Electronics:'📱',Books:'📖',Fashion:'👟',Home:'🏠',Gaming:'🎮'};
-    var hc=document.getElementById('homeCats');
-    if(hc&&cats.length){hc.innerHTML=cats.map(c=>'<a href="products.html?cat='+encodeURIComponent(c)+'" class="cat-card" style="text-decoration:none;color:inherit"><div class="icon">'+(icons[c]||'📦')+'</div><h3>'+c+'</h3><p>'+products.filter(p=>p.category===c).length+' products</p></a>').join('');}
-  }).catch(()=>{});
-});
-</script>
 </head>
 <body>
+<!-- Top Bar -->
 <div class="top-bar">
   <a class="logo" href="index.html">Fahd<span>Shop</span></a>
   <div class="search-bar">
+    <select id="catFilter">
+      <option value="">All</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Fashion">Fashion</option>
+      <option value="Home">Home</option>
+      <option value="Gaming">Gaming</option>
+      <option value="Toys">Toys</option>
+      <option value="Health">Health</option>
+      <option value="Sports">Sports</option>
+      <option value="Books">Books</option>
+      <option value="Grocery">Grocery</option>
+    </select>
     <input type="text" placeholder="Search Fahd Shop" id="searchInput" onkeydown="if(event.key==='Enter'){location.href='products.html?search='+this.value}">
     <button onclick="location.href='products.html?search='+(document.getElementById('searchInput').value||'')">🔍</button>
   </div>
   <div class="top-links">
-    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account</b></a>
+    <a href="login.html"><span class="greeting">Hello, Sign in</span><br><b>Account & Lists</b></a>
     <a href="orders.html"><span class="greeting">Returns</span><br><b>& Orders</b></a>
-    <a href="cart.html" class="cart-link">🛒<span class="cart-count" id="cartCount" style="display:none">0</span></a>
+    <a href="cart.html" class="cart-link"><span class="cart-icon">🛒</span><span class="cart-count" id="cartCount" style="display:none">0</span>Cart</a>
   </div>
 </div>
+<!-- Orange accent line -->
+<div class="accent-line"></div>
+<!-- Sub Nav -->
 <div class="subnav">
   <a href="index.html" class="active">☰ All</a>
   <a href="deals.html">Today's Deals <span class="deals-badge">HOT</span></a>
@@ -52,15 +46,57 @@ document.addEventListener('DOMContentLoaded', function() {
   <a href="returns.html">Help</a>
   <a href="ai.html" style="color:#ff9900">🤖 AI Assistant</a>
 </div>
-<div class="container">
 
+<!-- Hero Carousel -->
+<div class="container" style="margin-top:0">
 <div class="hero-banner">
-  <h1>Welcome to Fahd Shop</h1>
-  <p>Everything you need, in one place. Shop millions of products with fast delivery and great prices.</p>
-  <a class="btn-hero" href="products.html">Shop Now</a>
-  <div class="hero-dots"><span class="active"></span><span></span><span></span></div>
+  <button class="hero-arrow left" onclick="moveSlide(-1)">❮</button>
+  <div class="hero-slides" id="heroSlides">
+    <div class="hero-slide">
+      <div class="hero-text">
+        <h1>Shop the Latest Electronics</h1>
+        <p>Up to 40% off on phones, laptops, headphones and more. Free delivery on orders over $25.</p>
+        <a class="btn-hero" href="products.html?cat=Electronics">Shop Electronics →</a>
+      </div>
+      <div class="hero-img">📱</div>
+    </div>
+    <div class="hero-slide">
+      <div class="hero-text">
+        <h1>Fashion Deals This Week</h1>
+        <p>Discover trending styles from top brands. New arrivals every day with exclusive discounts.</p>
+        <a class="btn-hero" href="products.html?cat=Fashion">Shop Fashion →</a>
+      </div>
+      <div class="hero-img">👟</div>
+    </div>
+    <div class="hero-slide">
+      <div class="hero-text">
+        <h1>Home & Kitchen Essentials</h1>
+        <p>Transform your space with premium appliances, furniture and decor at unbeatable prices.</p>
+        <a class="btn-hero" href="products.html?cat=Home">Shop Home →</a>
+      </div>
+      <div class="hero-img">🏠</div>
+    </div>
+    <div class="hero-slide">
+      <div class="hero-text">
+        <h1>Gaming Zone</h1>
+        <p>Consoles, controllers and games. Level up your gaming experience today.</p>
+        <a class="btn-hero" href="products.html?cat=Gaming">Shop Gaming →</a>
+      </div>
+      <div class="hero-img">🎮</div>
+    </div>
+  </div>
+  <button class="hero-arrow right" onclick="moveSlide(1)">❯</button>
+  <div class="hero-dots" id="heroDots">
+    <span class="active" onclick="goSlide(0)"></span>
+    <span onclick="goSlide(1)"></span>
+    <span onclick="goSlide(2)"></span>
+    <span onclick="goSlide(3)"></span>
+  </div>
+</div>
 </div>
 
+<!-- Feature Boxes -->
+<div class="container">
 <div class="feature-grid">
   <div class="feature-box"><div class="icon">🚚</div><h3>Free Delivery</h3><p>Free shipping on orders over $25</p></div>
   <div class="feature-box"><div class="icon">🔒</div><h3>Secure Payment</h3><p>100% secure payment processing</p></div>
@@ -68,37 +104,44 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="feature-box"><div class="icon">🤖</div><h3>AI Assistant</h3><p>Get help from our AI chatbot</p></div>
 </div>
 
+<!-- Deals Banner -->
 <div class="deal-banner">
   <div><h2>🔥 Today's Deals</h2><p class="timer">Up to 50% off on selected items</p></div>
   <a class="btn-deal" href="deals.html">See All Deals →</a>
 </div>
 
+<!-- Featured Products -->
 <div class="section-header">
   <h2>Featured Products</h2>
   <a href="products.html">See all →</a>
 </div>
 <div class="product-grid" id="featured"></div>
 
+<!-- Browse Categories -->
 <div class="section-header">
   <h2>Browse Categories</h2>
   <a href="categories.html">See all →</a>
 </div>
 <div class="cat-grid" id="homeCats"></div>
 
+<!-- Best Sellers -->
 <div class="section-header">
   <h2>Best Sellers</h2>
   <a href="bestsellers.html">See all →</a>
 </div>
 <div class="product-grid" id="bestsellers"></div>
 
+<!-- Why Shop With Us -->
 <div class="section-header"><h2>Why Shop with Us?</h2></div>
 <div class="feature-grid">
   <div class="feature-box"><div class="icon">⭐</div><h3>Top Quality</h3><p>Curated products from trusted sellers</p></div>
   <div class="feature-box"><div class="icon">💰</div><h3>Best Prices</h3><p>Competitive pricing and daily deals</p></div>
   <div class="feature-box"><div class="icon">📱</div><h3>Shop Anywhere</h3><p>Works on phone, tablet, or desktop</p></div>
+  <div class="feature-box"><div class="icon">🛡️</div><h3>Buyer Protection</h3><p>Full refund if not satisfied</p></div>
+</div>
 </div>
 
-</div>
+<!-- Footer -->
 <div class="footer">
   <div class="footer-back" onclick="window.scrollTo(0,0)">Back to top</div>
   <div class="footer-grid">
@@ -106,16 +149,19 @@ document.addEventListener('DOMContentLoaded', function() {
       <a href="about.html">About Fahd Shop</a>
       <a href="contact.html">Contact Us</a>
       <a href="ai.html">AI Assistant</a>
+      <a href="about.html">Careers</a>
     </div>
     <div><h4>Make Money with Us</h4>
       <a href="admin.html">Sell on Fahd Shop</a>
       <a href="admin.html">Host Dashboard</a>
       <a href="products.html">Advertise Products</a>
+      <a href="admin.html">Affiliate Program</a>
     </div>
     <div><h4>Help & Support</h4>
       <a href="returns.html">Returns & Refunds</a>
       <a href="contact.html">Contact Us</a>
       <a href="returns.html">FAQ</a>
+      <a href="returns.html">Shipping Info</a>
     </div>
     <div><h4>Your Account</h4>
       <a href="account.html">Your Account</a>
@@ -124,12 +170,64 @@ document.addEventListener('DOMContentLoaded', function() {
       <a href="cart.html">Your Cart</a>
     </div>
   </div>
+  <div class="footer-divider"></div>
   <div class="footer-bottom">
     <div class="logo">Fahd<span>Shop</span></div>
     <p>© 2026 Fahd Shop. All rights reserved. | <a href="about.html" style="color:#999">Privacy</a> | <a href="about.html" style="color:#999">Terms</a></p>
   </div>
 </div>
+
 <script src="app.js"></script>
-<script>updateCartCount()</script>
+<script>
+// Hero Carousel
+var currentSlide = 0;
+var totalSlides = 4;
+var slideInterval;
+
+function moveSlide(dir) {
+  currentSlide = (currentSlide + dir + totalSlides) % totalSlides;
+  updateSlide();
+  resetAutoplay();
+}
+function goSlide(n) {
+  currentSlide = n;
+  updateSlide();
+  resetAutoplay();
+}
+function updateSlide() {
+  var slides = document.getElementById('heroSlides');
+  if (slides) slides.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+  var dots = document.querySelectorAll('#heroDots span');
+  dots.forEach(function(d, i) { d.className = i === currentSlide ? 'active' : ''; });
+}
+function resetAutoplay() {
+  clearInterval(slideInterval);
+  slideInterval = setInterval(function() { moveSlide(1); }, 5000);
+}
+resetAutoplay();
+
+// Load products
+document.addEventListener('DOMContentLoaded', function() {
+  renderProducts('featured', 8);
+  updateCartCount();
+  fetch('/api/products').then(function(r){return r.json()}).then(function(products) {
+    // Best sellers
+    var sorted = products.slice().sort(function(a,b){return (b.reviews||0)-(a.reviews||0)});
+    var bs = document.getElementById('bestsellers');
+    if (bs && sorted.length) {
+      bs.innerHTML = sorted.slice(0,4).map(function(p) {
+        var stars='';var r=Math.round(p.rating||0);for(var i=0;i<r;i++)stars+='\u2605';for(var j=r;j<5;j++)stars+='\u2606';
+        return '<div class="product-card" onclick="location.href=\'product.html?id='+p.id+'\'"><div class="img-wrap">'+imgTag(p.image,p.name,160)+'</div><div class="info"><div class="title">'+p.name+'</div><div class="stars"><span class="star-color">'+stars+'</span><span class="count">('+p.reviews+')</span></div><div class="price"><span class="current">$'+p.price+'</span>'+(p.oldPrice?' <span class="old">$'+p.oldPrice+'</span>':'')+(p.onSale?' <span class="badge">-'+p.salePercent+'%</span>':'')+'</div>'+(p.prime?'<div class="prime">✓ Prime</div>':'')+'</div></div>';
+      }).join('');
+    }
+    // Categories
+    var catSet={};products.forEach(function(p){if(p.category)catSet[p.category]=1});
+    var cats=Object.keys(catSet);
+    var icons={Electronics:'📱',Books:'📖',Fashion:'👟',Home:'🏠',Gaming:'🎮',Toys:'🧸',Health:'💊',Sports:'⚽',Grocery:'🛒'};
+    var hc=document.getElementById('homeCats');
+    if(hc&&cats.length){hc.innerHTML=cats.map(function(c){return '<a href="products.html?cat='+encodeURIComponent(c)+'" class="cat-card" style="text-decoration:none;color:inherit"><div class="icon">'+(icons[c]||'📦')+'</div><h3>'+c+'</h3><p>'+products.filter(function(p){return p.category===c}).length+' products</p></a>'}).join('')}
+  }).catch(function(){});
+});
+</script>
 </body>
 </html>
